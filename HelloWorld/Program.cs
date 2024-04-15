@@ -11,10 +11,11 @@ namespace HelloWorld
     {
         static void Main(string[] args)
         {
-            GameWindow window = new GameWindow(800, 600); 
-            Television televesion = new Television(window);
-            window.Run();
-            
+            using (Game game = new Game(800, 600))
+            {
+                game.Run();
+            }
+
         }
     }
 }
