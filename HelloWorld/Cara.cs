@@ -1,33 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OpenTK.Graphics.OpenGL;
+﻿using System.Drawing;
+using OpenTK;
 
 namespace HelloWorld
 {
-    internal class Cara
+    public class Cara
     {
-        public Puntos Puntos { get; }
-        public Color Color { get; }
+        private Puntos puntos = new Puntos();
 
-        public Cara(Puntos puntos, Color color)
+        public void AgregarPunto(Vector3 punto, Color color)
         {
-            Puntos = puntos ?? throw new ArgumentNullException(nameof(puntos));
-            Color = color;
+            puntos.AgregarPunto(punto, color);
         }
 
-        public void Dibujar()
+        public void TrazarPuntos()
         {
-            GL.Begin(PrimitiveType.Polygon);
-            GL.Color3(Color);
-            foreach (var punto in Puntos.Vertices)
-            {
-                GL.Vertex3(punto);
-            }
-            GL.End();
+            puntos.TrazarPuntos();
         }
     }
 }

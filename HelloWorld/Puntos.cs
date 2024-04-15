@@ -1,19 +1,41 @@
 ﻿using OpenTK;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Drawing;
+using OpenTK.Graphics.OpenGL;
 
 namespace HelloWorld
 {
-    internal class Puntos
+    public class Puntos
     {
-        public Vector3[] Vertices { get; }
-//asd
-        public Puntos(Vector3[] vertices)
+        private Dictionary<Vector3, Color> puntos = new Dictionary<Vector3, Color>();
+
+        public void AgregarPunto(Vector3 punto, Color color)
         {
-            Vertices = vertices ?? throw new ArgumentNullException(nameof(vertices));
+            if (!puntos.ContainsKey(punto))
+            {
+                puntos.Add(punto, color);
+            }
         }
+
+        public void TrazarPuntos()
+        {
+            if (puntos.Count < 3)
+            {
+                throw new InvalidOperationException("Se necesitan al menos 3 puntos para formar una figura.");
+            }
+
+            GL.Begin(PrimitiveType.Polygon);
+            foreach (var puntoColorPair in puntos)
+            {
+                GL.Color3(puntoColorPair.Value);
+                GL.Vertex3(puntoColorPair.Key);
+            }
+            GL.End();
+        }
+
+
+
+
     }
 }

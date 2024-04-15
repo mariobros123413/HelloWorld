@@ -1,26 +1,35 @@
-﻿using System;
+﻿using OpenTK;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+using OpenTK.Graphics.OpenGL;
 namespace HelloWorld
 {
-    internal class Objeto
+    public class Objeto
     {
-        public List<Cara> Caras { get; } = new List<Cara>();
-
-        public void AgregarCara(Cara cara)
+        public Dictionary<string, Cara> Caras { get; } = new Dictionary<string, Cara>();
+        public Vector3 Posicion { get; set; }
+        public Objeto(Vector3 posicion)
         {
-            Caras.Add(cara ?? throw new ArgumentNullException(nameof(cara)));
+            Posicion = posicion;
+        }
+
+        public void AgregarCara(string nombre, Cara cara)
+        {
+            if (cara == null)
+                throw new ArgumentNullException(nameof(cara));
+            Caras.Add(nombre, cara);
         }
 
         public void Dibujar()
         {
-            foreach (var cara in Caras)
+            GL.PushMatrix();
+            GL.Translate(Posicion);
+            foreach (var cara in Caras.Values)
             {
-                cara.Dibujar();
+                cara.TrazarPuntos();
+
             }
+            GL.PopMatrix();
         }
     }
 }

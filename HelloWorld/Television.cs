@@ -3,144 +3,117 @@ using OpenTK;
 
 namespace HelloWorld
 {
-    internal class Television : Objeto
+    public class Television : Objeto
     {
+        private Cara baseTrasera;
+        private Cara baseFrontal;
+        private Cara baseLadoIzquierdo;
+        private Cara baseLadoDerecho;
+        private Cara baseTapaSuperior;
+        private Cara baseTapaInferior;
+        private Cara marco;
+        private Cara marcoLadoIzquierdo;
+        private Cara marcoLadoDerecho;
+        private Cara marcoTapaSuperior;
+        private Cara marcoTapaInferior;
+        private Cara pantalla;
 
-        public Television(float x, float y, float z)
+        public Television(Vector3 posicion) : base(posicion)
         {
-            // Base de la televisión cara trasera
-            var baseTrasera = new Puntos(new[]
-            {
-                new Vector3(-0.4f+x, -0.9f+ y, -1.0f+z),
-                new Vector3(0.4f+x, -0.9f+ y, -1.0f+z),
-                new Vector3(0.4f+x, -0.6f+ y, -1.0f+z),
-                new Vector3(-0.4f+x, -0.6f+ y, -1.0f+z)
-                });
-            var caraBaseTrasera = new Cara(baseTrasera, Color.BlueViolet);
-            AgregarCara(caraBaseTrasera);
+            CrearTelevision();
+        }
 
-            // Base de la televisión cara frontal
-            var baseFrontal = new Puntos(new[]
-            {
-                new Vector3(-0.4f+x, -0.9f+ y, -0.8f+z),
-                new Vector3(0.4f+x, -0.9f+y, -0.8f+z),
-                new Vector3(0.4f+x, -0.6f+y, -0.8f+z),
-                new Vector3(-0.4f+x, -0.6f+ y, -0.8f+z)
-                });
-            var caraBaseFrontal = new Cara(baseFrontal, Color.BlueViolet);
-            AgregarCara(caraBaseFrontal);
+        private void CrearTelevision()
+        {
+            // Creamos las caras para la base del televisor
+            baseTrasera = new Cara();
+            baseTrasera.AgregarPunto(new Vector3(-0.4f, -0.9f, -1.0f), Color.BlueViolet);
+            baseTrasera.AgregarPunto(new Vector3(0.4f, -0.9f, -1.0f), Color.BlueViolet);
+            baseTrasera.AgregarPunto(new Vector3(0.4f, -0.6f, -1.0f), Color.BlueViolet);
+            baseTrasera.AgregarPunto(new Vector3(-0.4f, -0.6f, -1.0f), Color.BlueViolet);
 
-            // Lado izquierdo de la base
-            var baseLadoIzquierdo = new Puntos(new[]
-                        {
-                new Vector3(-0.4f+x, -0.9f+y, -1.0f+z),
-                new Vector3(-0.4f+x, -0.9f+y, -0.8f+z),
-                new Vector3(-0.4f+x, -0.6f+y, -0.8f+z),
-                new Vector3(-0.4f+x, -0.6f+y , -1.0f+z)
-                });
-            var caraBaseLadoIzquierdo = new Cara(baseLadoIzquierdo, Color.BlueViolet);
-            AgregarCara(caraBaseLadoIzquierdo);
+            baseFrontal = new Cara();
+            baseFrontal.AgregarPunto(new Vector3(-0.4f, -0.9f, -0.8f), Color.BlueViolet);
+            baseFrontal.AgregarPunto(new Vector3(0.4f, -0.9f, -0.8f), Color.BlueViolet);
+            baseFrontal.AgregarPunto(new Vector3(0.4f, -0.6f, -0.8f), Color.BlueViolet);
+            baseFrontal.AgregarPunto(new Vector3(-0.4f, -0.6f, -0.8f), Color.BlueViolet);
 
-            // Lado derecho de la base
-            var baseLadoDerecho = new Puntos(new[]
-                                    {
-                new Vector3(0.4f+x, -0.9f+y, -1.0f+z),
-                new Vector3(0.4f+x, -0.9f+y, -0.8f+z),
-                new Vector3(0.4f+x, -0.6f+y, -0.8f+z),
-                new Vector3(0.4f+x, -0.6f+y , -1.0f+z)
-                });
-            var caraBaseLadoDerecho = new Cara(baseLadoDerecho, Color.BlueViolet);
-            AgregarCara(caraBaseLadoDerecho);
+            baseLadoIzquierdo = new Cara();
+            baseLadoIzquierdo.AgregarPunto(new Vector3(-0.4f, -0.9f, -1.0f), Color.BlueViolet);
+            baseLadoIzquierdo.AgregarPunto(new Vector3(-0.4f, -0.9f, -0.8f), Color.BlueViolet);
+            baseLadoIzquierdo.AgregarPunto(new Vector3(-0.4f, -0.6f, -0.8f), Color.BlueViolet);
+            baseLadoIzquierdo.AgregarPunto(new Vector3(-0.4f, -0.6f, -1.0f), Color.BlueViolet);
 
-            //Tapa Superior de la base
-            var baseTapaSuperior = new Puntos(new[]
-                                    {
-                new Vector3(-0.4f+x, -0.7f+y, -1.0f+z),
-                new Vector3(0.4f+x, -0.7f+y, -1.0f+z),
-                new Vector3(0.4f+x, -0.7f+y, -0.8f+z),
-                new Vector3(-0.4f+x, -0.7f+y, -0.8f+z)
-                });
-            var caraBaseTapaSuperior = new Cara(baseTapaSuperior, Color.BlueViolet);
-            AgregarCara(caraBaseTapaSuperior);
+            baseLadoDerecho = new Cara();
+            baseLadoDerecho.AgregarPunto(new Vector3(0.4f, -0.9f, -1.0f), Color.BlueViolet);
+            baseLadoDerecho.AgregarPunto(new Vector3(0.4f, -0.9f, -0.8f), Color.BlueViolet);
+            baseLadoDerecho.AgregarPunto(new Vector3(0.4f, -0.6f, -0.8f), Color.BlueViolet);
+            baseLadoDerecho.AgregarPunto(new Vector3(0.4f, -0.6f, -1.0f), Color.BlueViolet);
 
-            //Tapa Inferior de la base
-            var baseTapaInferior = new Puntos(new[]
-                                    {
-                new Vector3(-0.4f+x, -0.9f+y, -1.0f+z),
-                new Vector3(0.4f+x, -0.9f+y, -1.0f+z),
-                new Vector3(0.4f+x, -0.9f+ y, -0.8f+z),
-                new Vector3(-0.4f+x, -0.9f+y, -0.8f+z)
-                });
-            var caraBaseTapaInferior = new Cara(baseTapaInferior, Color.BlueViolet);
-            AgregarCara(caraBaseTapaInferior);
+            baseTapaSuperior = new Cara();
+            baseTapaSuperior.AgregarPunto(new Vector3(-0.4f, -0.7f, -1.0f), Color.BlueViolet);
+            baseTapaSuperior.AgregarPunto(new Vector3(0.4f, -0.7f, -1.0f), Color.BlueViolet);
+            baseTapaSuperior.AgregarPunto(new Vector3(0.4f, -0.7f, -0.8f), Color.BlueViolet);
+            baseTapaSuperior.AgregarPunto(new Vector3(-0.4f, -0.7f, -0.8f), Color.BlueViolet);
 
-            //////////////////
+            baseTapaInferior = new Cara();
+            baseTapaInferior.AgregarPunto(new Vector3(-0.4f, -0.9f, -1.0f), Color.BlueViolet);
+            baseTapaInferior.AgregarPunto(new Vector3(0.4f, -0.9f, -1.0f), Color.BlueViolet);
+            baseTapaInferior.AgregarPunto(new Vector3(0.4f, -0.9f, -0.8f), Color.BlueViolet);
+            baseTapaInferior.AgregarPunto(new Vector3(-0.4f, -0.9f, -0.8f), Color.BlueViolet);
 
-            // Marco de la televisión
-            var marco = new Puntos(new[]
-            {
-                new Vector3(-1.0f+x, -0.6f+y, -1.0f+z),
-                new Vector3(1.0f+x, -0.6f+y, -1.0f+z),
-                new Vector3(1.0f+x, 0.6f+y, -1.0f+z),
-                new Vector3(-1.0f+x, 0.6f+y, -1.0f+z)
-            });
-            var caraMarco = new Cara(marco, Color.CadetBlue);
-            AgregarCara(caraMarco);
+            // Creamos las caras para el marco del televisor
+            marco = new Cara();
+            marco.AgregarPunto(new Vector3(-1.0f, -0.6f, -1.0f), Color.CadetBlue);
+            marco.AgregarPunto(new Vector3(1.0f, -0.6f, -1.0f), Color.CadetBlue);
+            marco.AgregarPunto(new Vector3(1.0f, 0.6f, -1.0f), Color.CadetBlue);
+            marco.AgregarPunto(new Vector3(-1.0f, 0.6f, -1.0f), Color.CadetBlue);
 
-            // Lado izquierdo del Marco
-            var marcoLadoIzquierdo = new Puntos(new[]
-            {
-                new Vector3(-1.0f+x, -0.6f+ y, -1.0f+z),
-                new Vector3(-1.0f+x, -0.6f+y, -0.8f+z),
-                new Vector3(-1.0f+x, 0.6f+y, -0.8f+z),
-                new Vector3(-1.0f+x, 0.6f+y, -1.0f+z)
-            });
-            var caraMarcoLadoIzquierdo = new Cara(marcoLadoIzquierdo, Color.CadetBlue);
-            AgregarCara(caraMarcoLadoIzquierdo);
+            marcoLadoIzquierdo = new Cara();
+            marcoLadoIzquierdo.AgregarPunto(new Vector3(-1.0f, -0.6f, -1.0f), Color.CadetBlue);
+            marcoLadoIzquierdo.AgregarPunto(new Vector3(-1.0f, -0.6f, -0.8f), Color.CadetBlue);
+            marcoLadoIzquierdo.AgregarPunto(new Vector3(-1.0f, 0.6f, -0.8f), Color.CadetBlue);
+            marcoLadoIzquierdo.AgregarPunto(new Vector3(-1.0f, 0.6f, -1.0f), Color.CadetBlue);
 
-            // Lado derecho del Marco
-            var marcoLadoDerecho = new Puntos(new[]
-            {
-                new Vector3(1.0f+x, -0.6f+y, -1.0f+z),
-                new Vector3(1.0f+x, -0.6f+y, -0.8f+z),
-                new Vector3(1.0f+x, 0.6f+y, -0.8f+z),
-                new Vector3(1.0f+x, 0.6f+y, -1.0f+z)
-            });
-            var caraMarcoLadoDerecho = new Cara(marcoLadoDerecho, Color.CadetBlue);
-            AgregarCara(caraMarcoLadoDerecho);
+            marcoLadoDerecho = new Cara();
+            marcoLadoDerecho.AgregarPunto(new Vector3(1.0f, -0.6f, -1.0f), Color.CadetBlue);
+            marcoLadoDerecho.AgregarPunto(new Vector3(1.0f, -0.6f, -0.8f), Color.CadetBlue);
+            marcoLadoDerecho.AgregarPunto(new Vector3(1.0f, 0.6f, -0.8f), Color.CadetBlue);
+            marcoLadoDerecho.AgregarPunto(new Vector3(1.0f, 0.6f, -1.0f), Color.CadetBlue);
 
-            //Tapa Superior del Marco
-            var marcoTapaSuperior = new Puntos(new[]
-            {
-                new Vector3(-1.0f+x, 0.6f+y, -1.0f+z),
-                new Vector3(-1.0f+x, 0.6f+y, -0.8f+z),
-                new Vector3(1.0f+x, 0.6f+y, -0.8f+z),
-                new Vector3(1.0f+x, 0.6f+y, -1.0f+z)
-            });
-            var caraMarcoTapaSuperior = new Cara(marcoTapaSuperior, Color.CadetBlue);
-            AgregarCara(caraMarcoTapaSuperior);
+            marcoTapaSuperior = new Cara();
+            marcoTapaSuperior.AgregarPunto(new Vector3(-1.0f, 0.6f, -1.0f), Color.CadetBlue);
+            marcoTapaSuperior.AgregarPunto(new Vector3(-1.0f, 0.6f, -0.8f), Color.CadetBlue);
+            marcoTapaSuperior.AgregarPunto(new Vector3(1.0f, 0.6f, -0.8f), Color.CadetBlue);
+            marcoTapaSuperior.AgregarPunto(new Vector3(1.0f, 0.6f, -1.0f), Color.CadetBlue);
 
-            //Tapa Inferior del Marco
-            var marcoTapaInferior = new Puntos(new[]
-            {
-                new Vector3(-1.0f+x, -0.6f+y, -1.0f+z),
-                new Vector3(-1.0f+x, -0.6f+y, -0.8f+z),
-                new Vector3(1.0f+x, -0.6f+y, -0.8f+z),
-                new Vector3(1.0f+x, -0.6f+y, -1.0f+z)
-            });
-            var caraMarcoTapaInferior = new Cara(marcoTapaInferior, Color.CadetBlue);
-            AgregarCara(caraMarcoTapaInferior);
+            marcoTapaInferior = new Cara();
+            marcoTapaInferior.AgregarPunto(new Vector3(-1.0f, -0.6f, -1.0f), Color.CadetBlue);
+            marcoTapaInferior.AgregarPunto(new Vector3(-1.0f, -0.6f, -0.8f), Color.CadetBlue);
+            marcoTapaInferior.AgregarPunto(new Vector3(1.0f, -0.6f, -0.8f), Color.CadetBlue);
+            marcoTapaInferior.AgregarPunto(new Vector3(1.0f, -0.6f, -1.0f), Color.CadetBlue);
 
-            // Pantalla frontal
-            var pantalla = new Puntos(new[]
-            {
-                new Vector3(-0.8f+x, -0.4f+y, -0.81f+z),
-                new Vector3(0.8f+x, -0.4f+y, -0.81f+z),
-                new Vector3(0.8f+x, 0.4f+y, -0.81f+z),
-                new Vector3(-0.8f+x, 0.4f+y, -0.81f+z)
-            });
-            var caraPantalla = new Cara(pantalla, Color.DarkOrange);
-            AgregarCara(caraPantalla);
+            // Creamos las caras para la pantalla del televisor
+            pantalla = new Cara();
+            pantalla.AgregarPunto(new Vector3(-0.8f, -0.4f, -0.81f), Color.DarkOrange);
+            pantalla.AgregarPunto(new Vector3(0.8f, -0.4f, -0.81f), Color.DarkOrange);
+            pantalla.AgregarPunto(new Vector3(0.8f, 0.4f, -0.81f), Color.DarkOrange);
+            pantalla.AgregarPunto(new Vector3(-0.8f, 0.4f, -0.81f), Color.DarkOrange);
+
+            // Agregar las caras al objeto Television
+            AgregarCara("BaseTrasera", baseTrasera);
+            AgregarCara("BaseFrontal", baseFrontal);
+            AgregarCara("BaseLadoIzquierdo", baseLadoIzquierdo);
+            AgregarCara("BaseLadoDerecho", baseLadoDerecho);
+            AgregarCara("BaseTapaSuperior", baseTapaSuperior);
+            AgregarCara("BaseTapaInferior", baseTapaInferior);
+            AgregarCara("Marco", marco);
+            AgregarCara("MarcoLadoIzquierdo", marcoLadoIzquierdo);
+            AgregarCara("MarcoLadoDerecho", marcoLadoDerecho);
+            AgregarCara("MarcoTapaSuperior", marcoTapaSuperior);
+            AgregarCara("MarcoTapaInferior", marcoTapaInferior);
+            AgregarCara("Pantalla", pantalla);
         }
     }
+
 }

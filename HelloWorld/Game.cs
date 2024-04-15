@@ -4,18 +4,39 @@ using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using System.ComponentModel;
 using System.Drawing;
-using System.Collections.Generic;
 
 namespace HelloWorld
 {
     internal class Game : GameWindow
     {
         private float angle = 0.0f;
-        private List<Television> televisores = new List<Television>();
+        private Escenario escenario;
 
 
         public Game(int width, int height) : base(width, height, GraphicsMode.Default, "Multiple TVs")
         {
+            escenario = new Escenario();
+            Television television = new Television(new Vector3(0, 0, 0));
+            escenario.AgregarObjeto("Television", television);
+
+            Television television2 = new Television(new Vector3(3, 0, 0)); // Por ejemplo, en (2, 0, 0)
+            escenario.AgregarObjeto("Television2", television2);
+
+            Television television3 = new Television(new Vector3(-3, 0, 0)); // Por ejemplo, en (2, 0, 0)
+            escenario.AgregarObjeto("Television3", television3);
+
+            Florero florero = new Florero(new Vector3(0, 0, 0));
+            escenario.AgregarObjeto("Florero", florero);
+
+            Florero florero2 = new Florero(new Vector3(3, 0, 0));
+            escenario.AgregarObjeto("Florero2", florero2);
+
+            Florero florero3 = new Florero(new Vector3(-3, 0, 0));
+            escenario.AgregarObjeto("Florero3", florero3);
+
+            EquipoSonido equipoSonido = new EquipoSonido(new Vector3(0, 0, 0));
+            escenario.AgregarObjeto("EquipoSonido", equipoSonido);
+
             Load += Game_Load;
             RenderFrame += Game_RenderFrame;
             UpdateFrame += Game_UpdateFrame;
@@ -26,25 +47,14 @@ namespace HelloWorld
         {
             GL.ClearColor(Color.FromArgb(5, 5, 25));
             GL.Enable(EnableCap.DepthTest);
-
-            televisores.Add(new Television(0,0,0));
-            televisores.Add(new Television(1,1,1));
-            televisores.Add(new Television(-1,-1,-1));
         }
 
         private void Game_RenderFrame(object sender, FrameEventArgs e)
         {
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-
             SetupPerspective();
             SetupCamera();
-
-            // Dibujar los televisores en la lista
-            foreach (var televisor in televisores)
-            {
-                televisor.Dibujar();
-            }
-
+            escenario.Dibujar();
             SwapBuffers();
         }
 
@@ -77,9 +87,10 @@ namespace HelloWorld
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
 
-            // Calcula la posición de la cámara en un círculo alrededor del objeto
-            float camX = (float)Math.Sin(angle * Math.PI / 180.0) * 3.0f;
-            float camZ = (float)Math.Cos(angle * Math.PI / 180.0) * 3.0f;
+            float distance = 6.0f; // Distancia 
+
+            float camX = (float)Math.Sin(angle * Math.PI / 180.0) * distance;
+            float camZ = (float)Math.Cos(angle * Math.PI / 180.0) * distance;
 
             Vector3 cameraPosition = new Vector3(camX, 2, camZ); // 
             Vector3 cameraTarget = new Vector3(0, 0, 0); // El objeto está en el origen

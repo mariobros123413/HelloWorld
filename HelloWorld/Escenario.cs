@@ -1,26 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HelloWorld
 {
-    internal class Escenario
+    public class Escenario
     {
-        public List<Objeto> Objetos { get; } = new List<Objeto>();
-
-        public void AgregarObjeto(Objeto objeto)
+        private Dictionary<String, Objeto> Objetos;
+        public Escenario()
         {
-            Objetos.Add(objeto);
+            Objetos = new Dictionary<String, Objeto>();
+        }
+        public void AgregarObjeto(String nombre, Objeto objeto)
+        {
+            Objetos.Add(nombre, objeto);
+            Console.WriteLine(nombre);
         }
 
         public void Dibujar()
         {
-            foreach (var objeto in Objetos)
+            foreach (var objeto in Objetos.Values)
             {
                 objeto.Dibujar();
             }
         }
+
     }
 }
