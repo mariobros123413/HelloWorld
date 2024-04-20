@@ -1,20 +1,30 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using OpenTK;
 
 namespace HelloWorld
 {
+    [Serializable]
     public class Cara
     {
-        private Puntos puntos = new Puntos();
+        private Puntos puntos;
+        public Vector3 Posicion { get; set; }
 
-        public void AgregarPunto(Vector3 punto, Color color)
+        public Cara(Vector3 posicion, Color color)
         {
-            puntos.AgregarPunto(punto, color);
+            Posicion = posicion;
+            puntos = new Puntos(color);
         }
 
-        public void TrazarPuntos()
+        public void AgregarPunto(Vector3 punto)
         {
-            puntos.TrazarPuntos();
+            puntos.AgregarPunto(punto);
+        }
+
+        public void TrazarPuntos(Vector3 posicion)
+        {
+            puntos.TrazarPuntos(posicion);
         }
     }
+
 }

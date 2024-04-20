@@ -8,34 +8,37 @@ namespace HelloWorld
 {
     public class Puntos
     {
-        private Dictionary<Vector3, Color> puntos = new Dictionary<Vector3, Color>();
+        private List<Vector3> puntos = new List<Vector3>();
+        private Color color;
 
-        public void AgregarPunto(Vector3 punto, Color color)
+        public Puntos(Color color)
         {
-            if (!puntos.ContainsKey(punto))
-            {
-                puntos.Add(punto, color);
-            }
+            this.color = color;
         }
 
-        public void TrazarPuntos()
+        public void AgregarPunto(Vector3 punto)
+        {
+            puntos.Add(punto);
+        }
+
+        public void TrazarPuntos(Vector3 posicion)
         {
             if (puntos.Count < 3)
             {
                 throw new InvalidOperationException("Se necesitan al menos 3 puntos para formar una figura.");
             }
-
+            GL.PushMatrix();
+            GL.Translate(posicion);
             GL.Begin(PrimitiveType.Polygon);
-            foreach (var puntoColorPair in puntos)
+            GL.Color3(color);
+            foreach (var punto in puntos)
             {
-                GL.Color3(puntoColorPair.Value);
-                GL.Vertex3(puntoColorPair.Key);
+                GL.Vertex3(punto);
             }
             GL.End();
+            GL.PopMatrix(); // Restaurar la matriz de modelo-vista
+
         }
-
-
-
-
     }
+
 }

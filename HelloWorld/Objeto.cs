@@ -4,32 +4,36 @@ using System.Collections.Generic;
 using OpenTK.Graphics.OpenGL;
 namespace HelloWorld
 {
+    [Serializable]
     public class Objeto
     {
-        public Dictionary<string, Cara> Caras { get; } = new Dictionary<string, Cara>();
+        private Dictionary<string, Parte> partes;
         public Vector3 Posicion { get; set; }
         public Objeto(Vector3 posicion)
         {
             Posicion = posicion;
+            partes = new Dictionary<string, Parte>();
+
         }
 
-        public void AgregarCara(string nombre, Cara cara)
+        public void AgregarParte(string nombre, Parte parte)
         {
-            if (cara == null)
-                throw new ArgumentNullException(nameof(cara));
-            Caras.Add(nombre, cara);
+            if (parte == null)
+                throw new ArgumentNullException(nameof(parte));
+            partes.Add(nombre, parte);
+        }
+
+        public Dictionary<string, Parte> ObtenerPartes()
+        {
+            return new Dictionary<string, Parte>(partes);
         }
 
         public void Dibujar()
         {
-            GL.PushMatrix();
-            GL.Translate(Posicion);
-            foreach (var cara in Caras.Values)
+            foreach (var parte in partes.Values)
             {
-                cara.TrazarPuntos();
-
+                parte.Dibujar(Posicion);
             }
-            GL.PopMatrix();
         }
     }
 }
