@@ -7,49 +7,61 @@ using System.Drawing;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
+using Newtonsoft.Json;
+using System.Linq;
 
 namespace HelloWorld
 {
     internal class Game : GameWindow
     {
         private float angle = 0.0f;
-        private Escenario escenario = new Escenario();
-        private Escenario escenario2 = new Escenario();
-
+        //private List<Escenario> list = new List<Escenario>();   
+        private List<Escenario> listaEscenarios = new List<Escenario>();
 
         public Game(int width, int height) : base(width, height, GraphicsMode.Default, "Multiple TVs")
         {
-            escenario.Posicion = new Vector3(0, 0, 0);
+            Escenario escenario = new Escenario();
+            escenario.Posicion = new Vector3(1, 1, 1);
 
             Objeto Television1 = CrearTelevision(new Vector3(0, 0, 0));
             escenario.AgregarObjeto("Television", Television1);
-            //Objeto Television2 = CrearTelevision(new Vector3(3, 0, 0));
-            //escenario.AgregarObjeto("Television2", Television2);
-            //Objeto Television3 = CrearTelevision(new Vector3(3, 2, 3));
-            //escenario.AgregarObjeto("Television3", Television3);
+            Objeto Television2 = CrearTelevision(new Vector3(3, 0, 0));
+            escenario.AgregarObjeto("Television2", Television2);
+            Objeto Television3 = CrearTelevision(new Vector3(3, 2, 3));
+            escenario.AgregarObjeto("Television3", Television3);
             Objeto Bocina1 = CrearEquipoSonido(new Vector3(0, 0, 0));
             escenario.AgregarObjeto("Bocina1", Bocina1);
             Objeto CrearFlorero1 = CrearFlorero(new Vector3(0, 0, 0));
             escenario.AgregarObjeto("CrearFlorero1", CrearFlorero1);
-            Serializar(@"C:\Users\jmari\Documents\escenario.xml", escenario);
+            listaEscenarios.Add(escenario);
 
+            // Serializar el escenario a un archivo JSON
+//
+            Escenario escenario2 = new Escenario();
             escenario2.Posicion = new Vector3(-3, 0, 0);
 
-            //Objeto Television4 = CrearTelevision2(new Vector3(0, 0, 0));
-            //escenario2.AgregarObjeto("Television4", Television4);
-            //Objeto Television5 = CrearTelevision2(new Vector3(3, 3, 0));
-            //escenario2.AgregarObjeto("Television5", Television5);
+            Objeto Television4 = CrearTelevision2(new Vector3(0, 0, 0));
+            escenario2.AgregarObjeto("Television4", Television4);
+            Objeto Television5 = CrearTelevision2(new Vector3(3, 3, 0));
+            escenario2.AgregarObjeto("Television5", Television5);
             Objeto Television6 = CrearTelevision2(new Vector3(3, 2, 3));
             escenario2.AgregarObjeto("Television6", Television6);
             Objeto CrearFlorero2 = CrearFlorero(new Vector3(3, 2, 3));
             escenario2.AgregarObjeto("CrearFlorero2", CrearFlorero2);
+            listaEscenarios.Add(escenario2);
+            SerializarEscenario(@".\..\..\..\..\escenario.json", listaEscenarios);
+            //listaEscenarios = DeserializarEscenario(@".\..\..\..\..\escenario.json");
 
             Load += Game_Load;
             RenderFrame += Game_RenderFrame;
             UpdateFrame += Game_UpdateFrame;
             Closing += Game_Closing;
         }
-
+        private List<Escenario>DeserializarEscenario(string filePath)
+        {
+            string json = File.ReadAllText(filePath);
+            return JsonConvert.DeserializeObject<List<Escenario>>(json);
+        }
         private void Game_Load(object sender, EventArgs e)
         {
             GL.ClearColor(Color.FromArgb(5, 5, 25));
@@ -61,8 +73,10 @@ namespace HelloWorld
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             SetupPerspective();
             SetupCamera();
-            escenario.Dibujar();
-            escenario2.Dibujar();
+            foreach (var escenario in listaEscenarios)
+            {
+                escenario.Dibujar();
+            }
             SwapBuffers();
         }
 
@@ -127,28 +141,21 @@ namespace HelloWorld
         {
 
         }
-        public void Serializar(string nombreArchivo, Escenario escenarioSer)
+        private void SerializarEscenario(string nombreArchivo, List<Escenario> escenarios)
         {
-            // Obtener la ruta absoluta del archivo
-            string rutaAbsoluta = Path.GetFullPath(nombreArchivo);
-
-            // Serializar el escenario y guardar en la ruta absoluta
-            XmlSerializer serializer = new XmlSerializer(typeof(Escenario));
-            using (TextWriter writer = new StreamWriter(rutaAbsoluta))
+            JsonSerializerSettings settings = new JsonSerializerSettings
             {
-                serializer.Serialize(writer, escenarioSer);
-            }
+                Formatting = Formatting.Indented,
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                PreserveReferencesHandling = PreserveReferencesHandling.None // Cambio aquí
+            };
+
+            string json = JsonConvert.SerializeObject(escenarios, settings);
+            File.WriteAllText(nombreArchivo, json);
         }
 
-        // Deserializar un escenario desde un archivo XML
-        public static Escenario Deserializar(string nombreArchivo)
-        {
-            XmlSerializer serializer = new XmlSerializer(typeof(Escenario));
-            using (TextReader reader = new StreamReader(nombreArchivo))
-            {
-                return (Escenario)serializer.Deserialize(reader);
-            }
-        }
+
+
 
         private Objeto CrearTelevision(Vector3 posicion)
         {

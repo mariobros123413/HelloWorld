@@ -7,7 +7,7 @@ namespace HelloWorld
     [Serializable]
     public class Cara
     {
-        private Puntos puntos;
+        public Puntos puntos;
         public Vector3 Posicion { get; set; }
 
         public Cara(Vector3 posicion, Color color)

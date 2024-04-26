@@ -7,7 +7,7 @@ namespace HelloWorld
     [Serializable]
     public class Objeto
     {
-        private Dictionary<string, Parte> partes;
+        public Dictionary<string, Parte> partes;
         public Vector3 Posicion { get; set; }
         public Objeto(Vector3 posicion)
         {

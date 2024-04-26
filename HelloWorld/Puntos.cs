@@ -3,13 +3,26 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using OpenTK.Graphics.OpenGL;
+using System.Linq;
 
 namespace HelloWorld
 {
     public class Puntos
     {
         private List<Vector3> puntos = new List<Vector3>();
-        private Color color;
+        public List<float[]> PuntosSimples
+        {
+            get
+            {
+                return puntos.Select(v => new float[] { v.X, v.Y, v.Z }).ToList();
+            }
+            set
+            {
+                puntos = value.Select(a => new Vector3(a[0], a[1], a[2])).ToList();
+            }
+        }
+        public Color color;
+        //public Dictionary<string, Vector3> puntos { get; } = new Dictionary<string, Vector3>();
 
         public Puntos(Color color)
         {

@@ -8,19 +8,28 @@ namespace HelloWorld
     [Serializable]
     public class Escenario
     {
-        private Dictionary<String, Objeto> Objetos;
+        public Dictionary<String, Objeto> Objetos;
         public Escenario()
         {
             Objetos = new Dictionary<string, Objeto>();
-            Posicion = Vector3.Zero; // Esto asegura que la posición se inicialice correctamente
+            Posicion = Vector3.Zero;
         }
 
-        // Propiedad para la posición del escenario
         public Vector3 Posicion { get; set; }
         public void AgregarObjeto(String nombre, Objeto objeto)
         {
             Objetos.Add(nombre, objeto);
             Console.WriteLine(nombre);
+        }
+        public Dictionary<string, Objeto> ObtenerObjetos()
+        {
+            return Objetos;
+            //return new Dictionary<string, Objeto>(Objetos);
+        }
+
+        public Dictionary<string, Escenario> ObtenerEscenario()
+        {
+            return new Dictionary<string, Escenario>();
         }
 
         public void Dibujar()
