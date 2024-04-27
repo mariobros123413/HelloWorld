@@ -34,14 +34,14 @@ namespace HelloWorld
             puntos.Add(punto);
         }
 
-        public void TrazarPuntos(Vector3 posicion)
+        public void TrazarPuntos(float[] posicion)
         {
             if (puntos.Count < 3)
             {
                 throw new InvalidOperationException("Se necesitan al menos 3 puntos para formar una figura.");
             }
             GL.PushMatrix();
-            GL.Translate(posicion);
+            GL.Translate(posicion[0], posicion[1], posicion[2]);
             GL.Begin(PrimitiveType.Polygon);
             GL.Color3(color);
             foreach (var punto in puntos)

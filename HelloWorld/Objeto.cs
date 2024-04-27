@@ -8,10 +8,10 @@ namespace HelloWorld
     public class Objeto
     {
         public Dictionary<string, Parte> partes;
-        public Vector3 Posicion { get; set; }
-        public Objeto(Vector3 posicion)
+        public float[] Posicion { get; set; } // Cambio de Vector3 a float[]
+        public Objeto()
         {
-            Posicion = posicion;
+            Posicion = new float[3];
             partes = new Dictionary<string, Parte>();
 
         }

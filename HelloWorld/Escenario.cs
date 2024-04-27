@@ -12,10 +12,10 @@ namespace HelloWorld
         public Escenario()
         {
             Objetos = new Dictionary<string, Objeto>();
-            Posicion = Vector3.Zero;
+            Posicion = new float[3];
         }
 
-        public Vector3 Posicion { get; set; }
+        public float[] Posicion { get; set; }
         public void AgregarObjeto(String nombre, Objeto objeto)
         {
             Objetos.Add(nombre, objeto);
@@ -24,7 +24,6 @@ namespace HelloWorld
         public Dictionary<string, Objeto> ObtenerObjetos()
         {
             return Objetos;
-            //return new Dictionary<string, Objeto>(Objetos);
         }
 
         public Dictionary<string, Escenario> ObtenerEscenario()
@@ -35,7 +34,7 @@ namespace HelloWorld
         public void Dibujar()
         {
             GL.PushMatrix();
-            GL.Translate(Posicion);
+            GL.Translate(Posicion[0], Posicion[1], Posicion[2]);
 
             foreach (var objeto in Objetos.Values)
             {

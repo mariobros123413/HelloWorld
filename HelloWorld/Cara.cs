@@ -8,11 +8,11 @@ namespace HelloWorld
     public class Cara
     {
         public Puntos puntos;
-        public Vector3 Posicion { get; set; }
+        public float[] Posicion { get; set; } // Cambio de Vector3 a float[]
 
-        public Cara(Vector3 posicion, Color color)
+        public Cara(Color color)
         {
-            Posicion = posicion;
+            Posicion = new float[3];
             puntos = new Puntos(color);
         }
 
@@ -21,7 +21,7 @@ namespace HelloWorld
             puntos.AgregarPunto(punto);
         }
 
-        public void TrazarPuntos(Vector3 posicion)
+        public void TrazarPuntos(float[] posicion)
         {
             puntos.TrazarPuntos(posicion);
         }

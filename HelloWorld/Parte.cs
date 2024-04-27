@@ -9,11 +9,11 @@ namespace HelloWorld
     public class Parte
     {
         public Dictionary<string, Cara> caras { get; } = new Dictionary<string, Cara>();
-        public Vector3 Posicion { get; set; }
-        public Parte(Vector3 posicion)
+        public float[] Posicion { get; set; } // Cambio de Vector3 a float[]
+        public Parte()
         {
             caras = new Dictionary<string, Cara>();
-            Posicion = posicion;
+            Posicion = new float[3];
         }
         public void AgregarCara(string nombre, Cara cara)
         {
@@ -29,7 +29,7 @@ namespace HelloWorld
             return new Dictionary<string, Cara>(caras);
         }
 
-        public void Dibujar(Vector3 posicion)
+        public void Dibujar(float[] posicion)
         {
             foreach (var cara in caras.Values)
             {

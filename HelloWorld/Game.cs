@@ -21,32 +21,40 @@ namespace HelloWorld
         public Game(int width, int height) : base(width, height, GraphicsMode.Default, "Multiple TVs")
         {
             Escenario escenario = new Escenario();
-            escenario.Posicion = new Vector3(1, 1, 1);
+            escenario.Posicion[0] = 1.0f; // Asigna la coordenada x
+            escenario.Posicion[1] = 1.0f; // Asigna la coordenada y
+            escenario.Posicion[2] = 1.0f; // Asigna la coordenada z
 
-            Objeto Television1 = CrearTelevision(new Vector3(0, 0, 0));
+
+            Objeto Television1 = CrearTelevision(new float[] { 0.0f, 0.0f, 0.0f });
             escenario.AgregarObjeto("Television", Television1);
-            Objeto Television2 = CrearTelevision(new Vector3(3, 0, 0));
+            Objeto Television2 = CrearTelevision(new float[] { 3.0f, 0.0f, 0.0f });
             escenario.AgregarObjeto("Television2", Television2);
-            Objeto Television3 = CrearTelevision(new Vector3(3, 2, 3));
+            Objeto Television3 = CrearTelevision(new float[] { 3.0f, 2.0f, 3.0f });
             escenario.AgregarObjeto("Television3", Television3);
-            Objeto Bocina1 = CrearEquipoSonido(new Vector3(0, 0, 0));
+            Objeto Bocina1 = CrearEquipoSonido(new float[] { 0.0f, 0.0f, 0.0f });
             escenario.AgregarObjeto("Bocina1", Bocina1);
-            Objeto CrearFlorero1 = CrearFlorero(new Vector3(0, 0, 0));
+            Objeto CrearFlorero1 = CrearFlorero(new float[] { 0.0f, 0.0f, 0.0f });
             escenario.AgregarObjeto("CrearFlorero1", CrearFlorero1);
             listaEscenarios.Add(escenario);
 
             // Serializar el escenario a un archivo JSON
-//
+            //
             Escenario escenario2 = new Escenario();
-            escenario2.Posicion = new Vector3(-3, 0, 0);
+            escenario2.Posicion[0] = -1.0f; // Asigna la coordenada x
+            escenario2.Posicion[1] = -1.0f; // Asigna la coordenada y
+            escenario2.Posicion[2] = -1.0f; // Asigna la coordenada z
 
-            Objeto Television4 = CrearTelevision2(new Vector3(0, 0, 0));
+
+            Objeto Television4 = CrearTelevision2(new float[] { 0.0f, 0.0f, 0.0f });
             escenario2.AgregarObjeto("Television4", Television4);
-            Objeto Television5 = CrearTelevision2(new Vector3(3, 3, 0));
+            Objeto Television5 = CrearTelevision2(new float[] { 3.0f, 0.0f, 0.0f });
             escenario2.AgregarObjeto("Television5", Television5);
-            Objeto Television6 = CrearTelevision2(new Vector3(3, 2, 3));
+            Objeto Television6 = CrearTelevision2(new float[] { 3.0f, 2.0f, 3.0f });
             escenario2.AgregarObjeto("Television6", Television6);
-            Objeto CrearFlorero2 = CrearFlorero(new Vector3(3, 2, 3));
+            Objeto Bocina2 = CrearEquipoSonido(new float[] { 0.0f, 0.0f, 0.0f });
+            escenario2.AgregarObjeto("Bocina2", Bocina2);
+            Objeto CrearFlorero2 = CrearFlorero(new float[] { 0.0f, 0.0f, 0.0f });
             escenario2.AgregarObjeto("CrearFlorero2", CrearFlorero2);
             listaEscenarios.Add(escenario2);
             SerializarEscenario(@".\..\..\..\..\escenario.json", listaEscenarios);
@@ -57,7 +65,7 @@ namespace HelloWorld
             UpdateFrame += Game_UpdateFrame;
             Closing += Game_Closing;
         }
-        private List<Escenario>DeserializarEscenario(string filePath)
+        private List<Escenario> DeserializarEscenario(string filePath)
         {
             string json = File.ReadAllText(filePath);
             return JsonConvert.DeserializeObject<List<Escenario>>(json);
@@ -109,7 +117,7 @@ namespace HelloWorld
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
 
-            float distance = 6.0f; // Distancia 
+            float distance = 15.0f; // Distancia 
 
             float camX = (float)Math.Sin(angle * Math.PI / 180.0) * distance;
             float camZ = (float)Math.Cos(angle * Math.PI / 180.0) * distance;
@@ -157,47 +165,56 @@ namespace HelloWorld
 
 
 
-        private Objeto CrearTelevision(Vector3 posicion)
+        private Objeto CrearTelevision(float[] posicion)
         {
-            Objeto television = new Objeto(posicion);
-
+            Objeto television = new Objeto();
+            television.Posicion = posicion;
             // Creamos las partes de la televisión
-            Parte baseTelevision = new Parte(posicion);
-            Parte marcoTelevision = new Parte(posicion);
-            Parte pantallaTelevision = new Parte(posicion);
+            Parte baseTelevision = new Parte();
+            Parte marcoTelevision = new Parte();
+            Parte pantallaTelevision = new Parte();
 
             // Creamos las caras para la base del televisor
-            Cara baseTrasera = new Cara(television.Posicion, Color.BlueViolet);
+            Cara baseTrasera = new Cara(Color.BlueViolet);
+            baseTrasera.Posicion = posicion;
             baseTrasera.AgregarPunto(new Vector3(-0.4f, -0.9f, -1.0f));
             baseTrasera.AgregarPunto(new Vector3(0.4f, -0.9f, -1.0f));
             baseTrasera.AgregarPunto(new Vector3(0.4f, -0.6f, -1.0f));
             baseTrasera.AgregarPunto(new Vector3(-0.4f, -0.6f, -1.0f));
-            Cara baseFrontal = new Cara(television.Posicion, Color.BlueViolet);
+            Cara baseFrontal = new Cara(Color.BlueViolet);
+            baseFrontal.Posicion = posicion;
+
             baseFrontal.AgregarPunto(new Vector3(-0.4f, -0.9f, -0.8f));
             baseFrontal.AgregarPunto(new Vector3(0.4f, -0.9f, -0.8f));
             baseFrontal.AgregarPunto(new Vector3(0.4f, -0.6f, -0.8f));
             baseFrontal.AgregarPunto(new Vector3(-0.4f, -0.6f, -0.8f));
 
-            Cara baseLadoIzquierdo = new Cara(television.Posicion, Color.BlueViolet);
+            Cara baseLadoIzquierdo = new Cara(Color.BlueViolet);
+            baseLadoIzquierdo.Posicion = posicion;
             baseLadoIzquierdo.AgregarPunto(new Vector3(-0.4f, -0.9f, -1.0f));
             baseLadoIzquierdo.AgregarPunto(new Vector3(-0.4f, -0.9f, -0.8f));
             baseLadoIzquierdo.AgregarPunto(new Vector3(-0.4f, -0.6f, -0.8f));
             baseLadoIzquierdo.AgregarPunto(new Vector3(-0.4f, -0.6f, -1.0f));
 
-            Cara baseLadoDerecho = new Cara(television.Posicion, Color.BlueViolet);
+            Cara baseLadoDerecho = new Cara(Color.BlueViolet);
+            baseLadoDerecho.Posicion = posicion;
 
             baseLadoDerecho.AgregarPunto(new Vector3(0.4f, -0.9f, -1.0f));
             baseLadoDerecho.AgregarPunto(new Vector3(0.4f, -0.9f, -0.8f));
             baseLadoDerecho.AgregarPunto(new Vector3(0.4f, -0.6f, -0.8f));
             baseLadoDerecho.AgregarPunto(new Vector3(0.4f, -0.6f, -1.0f));
 
-            Cara baseTapaSuperior = new Cara(television.Posicion, Color.BlueViolet);
+            Cara baseTapaSuperior = new Cara(Color.BlueViolet);
+            baseTapaSuperior.Posicion = posicion;
+
             baseTapaSuperior.AgregarPunto(new Vector3(-0.4f, -0.7f, -1.0f));
             baseTapaSuperior.AgregarPunto(new Vector3(0.4f, -0.7f, -1.0f));
             baseTapaSuperior.AgregarPunto(new Vector3(0.4f, -0.7f, -0.8f));
             baseTapaSuperior.AgregarPunto(new Vector3(-0.4f, -0.7f, -0.8f));
 
-            Cara baseTapaInferior = new Cara(television.Posicion, Color.BlueViolet);
+            Cara baseTapaInferior = new Cara(Color.BlueViolet);
+            baseTapaInferior.Posicion = posicion;
+
             baseTapaInferior.AgregarPunto(new Vector3(-0.4f, -0.9f, -1.0f));
             baseTapaInferior.AgregarPunto(new Vector3(0.4f, -0.9f, -1.0f));
             baseTapaInferior.AgregarPunto(new Vector3(0.4f, -0.9f, -0.8f));
@@ -212,31 +229,39 @@ namespace HelloWorld
 
 
             // Creamos las caras para el marco del televisor
-            Cara marco = new Cara(television.Posicion, Color.CadetBlue);
+            Cara marco = new Cara(Color.CadetBlue);
+            marco.Posicion = posicion;
+
             marco.AgregarPunto(new Vector3(-1.0f, -0.6f, -1.0f));
             marco.AgregarPunto(new Vector3(1.0f, -0.6f, -1.0f));
             marco.AgregarPunto(new Vector3(1.0f, 0.6f, -1.0f));
             marco.AgregarPunto(new Vector3(-1.0f, 0.6f, -1.0f));
 
-            Cara marcoLadoIzquierdo = new Cara(television.Posicion, Color.CadetBlue);
+            Cara marcoLadoIzquierdo = new Cara(Color.CadetBlue);
+            marcoLadoIzquierdo.Posicion = posicion;
+
             marcoLadoIzquierdo.AgregarPunto(new Vector3(-1.0f, -0.6f, -1.0f));
             marcoLadoIzquierdo.AgregarPunto(new Vector3(-1.0f, -0.6f, -0.8f));
             marcoLadoIzquierdo.AgregarPunto(new Vector3(-1.0f, 0.6f, -0.8f));
             marcoLadoIzquierdo.AgregarPunto(new Vector3(-1.0f, 0.6f, -1.0f));
 
-            Cara marcoLadoDerecho = new Cara(television.Posicion, Color.CadetBlue);
+            Cara marcoLadoDerecho = new Cara(Color.CadetBlue);
+            marcoLadoDerecho.Posicion = posicion;
             marcoLadoDerecho.AgregarPunto(new Vector3(1.0f, -0.6f, -1.0f));
             marcoLadoDerecho.AgregarPunto(new Vector3(1.0f, -0.6f, -0.8f));
             marcoLadoDerecho.AgregarPunto(new Vector3(1.0f, 0.6f, -0.8f));
             marcoLadoDerecho.AgregarPunto(new Vector3(1.0f, 0.6f, -1.0f));
 
-            Cara marcoTapaSuperior = new Cara(television.Posicion, Color.CadetBlue);
+            Cara marcoTapaSuperior = new Cara(Color.CadetBlue);
+            marcoTapaSuperior.Posicion = posicion;
+
             marcoTapaSuperior.AgregarPunto(new Vector3(-1.0f, 0.6f, -1.0f));
             marcoTapaSuperior.AgregarPunto(new Vector3(-1.0f, 0.6f, -0.8f));
             marcoTapaSuperior.AgregarPunto(new Vector3(1.0f, 0.6f, -0.8f));
             marcoTapaSuperior.AgregarPunto(new Vector3(1.0f, 0.6f, -1.0f));
 
-            Cara marcoTapaInferior = new Cara(television.Posicion, Color.CadetBlue);
+            Cara marcoTapaInferior = new Cara(Color.CadetBlue);
+            marcoTapaInferior.Posicion = posicion;
             marcoTapaInferior.AgregarPunto(new Vector3(-1.0f, -0.6f, -1.0f));
             marcoTapaInferior.AgregarPunto(new Vector3(-1.0f, -0.6f, -0.8f));
             marcoTapaInferior.AgregarPunto(new Vector3(1.0f, -0.6f, -0.8f));
@@ -248,7 +273,8 @@ namespace HelloWorld
             baseTelevision.AgregarCara("MarcoTapaSuperior", marcoTapaSuperior);
             baseTelevision.AgregarCara("MarcoTapaInferior", marcoTapaInferior);
 
-            Cara pantalla = new Cara(television.Posicion, Color.DarkOrange);
+            Cara pantalla = new Cara(Color.DarkOrange);
+            pantalla.Posicion = posicion;
             pantalla.AgregarPunto(new Vector3(-0.8f, -0.4f, -0.81f));
             pantalla.AgregarPunto(new Vector3(0.8f, -0.4f, -0.81f));
             pantalla.AgregarPunto(new Vector3(0.8f, 0.4f, -0.81f));
@@ -264,47 +290,56 @@ namespace HelloWorld
             return television;
         }
 
-        private Objeto CrearTelevision2(Vector3 posicion)
+        private Objeto CrearTelevision2(float[] posicion)
         {
-            Objeto television = new Objeto(posicion);
+            Objeto television = new Objeto();
+            television.Posicion = posicion;
 
             // Creamos las partes de la televisión
-            Parte baseTelevision = new Parte(posicion);
-            Parte marcoTelevision = new Parte(posicion);
-            Parte pantallaTelevision = new Parte(posicion);
-
+            Parte baseTelevision = new Parte();
+            baseTelevision.Posicion = posicion;
+            Parte marcoTelevision = new Parte();
+            marcoTelevision.Posicion = posicion;
+            Parte pantallaTelevision = new Parte();
+            pantallaTelevision.Posicion = posicion;
             // Creamos las caras para la base del televisor
-            Cara baseTrasera = new Cara(television.Posicion, Color.Magenta);
+            Cara baseTrasera = new Cara(Color.Magenta);
+            baseTrasera.Posicion = posicion;
             baseTrasera.AgregarPunto(new Vector3(-0.4f, -0.9f, -1.0f));
             baseTrasera.AgregarPunto(new Vector3(0.4f, -0.9f, -1.0f));
             baseTrasera.AgregarPunto(new Vector3(0.4f, -0.6f, -1.0f));
             baseTrasera.AgregarPunto(new Vector3(-0.4f, -0.6f, -1.0f));
-            Cara baseFrontal = new Cara(television.Posicion, Color.Magenta);
+            Cara baseFrontal = new Cara(Color.Magenta);
+            baseFrontal.Posicion = posicion;
             baseFrontal.AgregarPunto(new Vector3(-0.4f, -0.9f, -0.8f));
             baseFrontal.AgregarPunto(new Vector3(0.4f, -0.9f, -0.8f));
             baseFrontal.AgregarPunto(new Vector3(0.4f, -0.6f, -0.8f));
             baseFrontal.AgregarPunto(new Vector3(-0.4f, -0.6f, -0.8f));
 
-            Cara baseLadoIzquierdo = new Cara(television.Posicion, Color.Magenta);
+            Cara baseLadoIzquierdo = new Cara(Color.Magenta);
+            baseLadoIzquierdo.Posicion = posicion;
             baseLadoIzquierdo.AgregarPunto(new Vector3(-0.4f, -0.9f, -1.0f));
             baseLadoIzquierdo.AgregarPunto(new Vector3(-0.4f, -0.9f, -0.8f));
             baseLadoIzquierdo.AgregarPunto(new Vector3(-0.4f, -0.6f, -0.8f));
             baseLadoIzquierdo.AgregarPunto(new Vector3(-0.4f, -0.6f, -1.0f));
 
-            Cara baseLadoDerecho = new Cara(television.Posicion, Color.Magenta);
+            Cara baseLadoDerecho = new Cara(Color.Magenta);
+            baseLadoDerecho.Posicion = posicion;
 
             baseLadoDerecho.AgregarPunto(new Vector3(0.4f, -0.9f, -1.0f));
             baseLadoDerecho.AgregarPunto(new Vector3(0.4f, -0.9f, -0.8f));
             baseLadoDerecho.AgregarPunto(new Vector3(0.4f, -0.6f, -0.8f));
             baseLadoDerecho.AgregarPunto(new Vector3(0.4f, -0.6f, -1.0f));
 
-            Cara baseTapaSuperior = new Cara(television.Posicion, Color.Magenta);
+            Cara baseTapaSuperior = new Cara(Color.Magenta);
+            baseTapaSuperior.Posicion = posicion;
             baseTapaSuperior.AgregarPunto(new Vector3(-0.4f, -0.7f, -1.0f));
             baseTapaSuperior.AgregarPunto(new Vector3(0.4f, -0.7f, -1.0f));
             baseTapaSuperior.AgregarPunto(new Vector3(0.4f, -0.7f, -0.8f));
             baseTapaSuperior.AgregarPunto(new Vector3(-0.4f, -0.7f, -0.8f));
 
-            Cara baseTapaInferior = new Cara(television.Posicion, Color.Magenta);
+            Cara baseTapaInferior = new Cara(Color.Magenta);
+            baseTapaInferior.Posicion = posicion;
             baseTapaInferior.AgregarPunto(new Vector3(-0.4f, -0.9f, -1.0f));
             baseTapaInferior.AgregarPunto(new Vector3(0.4f, -0.9f, -1.0f));
             baseTapaInferior.AgregarPunto(new Vector3(0.4f, -0.9f, -0.8f));
@@ -319,31 +354,36 @@ namespace HelloWorld
 
 
             // Creamos las caras para el marco del televisor
-            Cara marco = new Cara(television.Posicion, Color.LightYellow);
+            Cara marco = new Cara(Color.LightYellow);
+            marco.Posicion = posicion;
             marco.AgregarPunto(new Vector3(-1.0f, -0.6f, -1.0f));
             marco.AgregarPunto(new Vector3(1.0f, -0.6f, -1.0f));
             marco.AgregarPunto(new Vector3(1.0f, 0.6f, -1.0f));
             marco.AgregarPunto(new Vector3(-1.0f, 0.6f, -1.0f));
 
-            Cara marcoLadoIzquierdo = new Cara(television.Posicion, Color.LightYellow);
+            Cara marcoLadoIzquierdo = new Cara(Color.LightYellow);
+            marcoLadoIzquierdo.Posicion = posicion;
             marcoLadoIzquierdo.AgregarPunto(new Vector3(-1.0f, -0.6f, -1.0f));
             marcoLadoIzquierdo.AgregarPunto(new Vector3(-1.0f, -0.6f, -0.8f));
             marcoLadoIzquierdo.AgregarPunto(new Vector3(-1.0f, 0.6f, -0.8f));
             marcoLadoIzquierdo.AgregarPunto(new Vector3(-1.0f, 0.6f, -1.0f));
 
-            Cara marcoLadoDerecho = new Cara(television.Posicion, Color.LightYellow);
+            Cara marcoLadoDerecho = new Cara(Color.LightYellow);
+            marcoLadoDerecho.Posicion = posicion;
             marcoLadoDerecho.AgregarPunto(new Vector3(1.0f, -0.6f, -1.0f));
             marcoLadoDerecho.AgregarPunto(new Vector3(1.0f, -0.6f, -0.8f));
             marcoLadoDerecho.AgregarPunto(new Vector3(1.0f, 0.6f, -0.8f));
             marcoLadoDerecho.AgregarPunto(new Vector3(1.0f, 0.6f, -1.0f));
 
-            Cara marcoTapaSuperior = new Cara(television.Posicion, Color.LightYellow);
+            Cara marcoTapaSuperior = new Cara(Color.LightYellow);
+            marcoTapaSuperior.Posicion = posicion;
             marcoTapaSuperior.AgregarPunto(new Vector3(-1.0f, 0.6f, -1.0f));
             marcoTapaSuperior.AgregarPunto(new Vector3(-1.0f, 0.6f, -0.8f));
             marcoTapaSuperior.AgregarPunto(new Vector3(1.0f, 0.6f, -0.8f));
             marcoTapaSuperior.AgregarPunto(new Vector3(1.0f, 0.6f, -1.0f));
 
-            Cara marcoTapaInferior = new Cara(television.Posicion, Color.LightYellow);
+            Cara marcoTapaInferior = new Cara(Color.LightYellow);
+            marcoTapaInferior.Posicion = posicion;
             marcoTapaInferior.AgregarPunto(new Vector3(-1.0f, -0.6f, -1.0f));
             marcoTapaInferior.AgregarPunto(new Vector3(-1.0f, -0.6f, -0.8f));
             marcoTapaInferior.AgregarPunto(new Vector3(1.0f, -0.6f, -0.8f));
@@ -355,7 +395,8 @@ namespace HelloWorld
             baseTelevision.AgregarCara("MarcoTapaSuperior", marcoTapaSuperior);
             baseTelevision.AgregarCara("MarcoTapaInferior", marcoTapaInferior);
 
-            Cara pantalla = new Cara(television.Posicion, Color.DarkOrange);
+            Cara pantalla = new Cara(Color.DarkOrange);
+            pantalla.Posicion = posicion;
             pantalla.AgregarPunto(new Vector3(-0.8f, -0.4f, -0.81f));
             pantalla.AgregarPunto(new Vector3(0.8f, -0.4f, -0.81f));
             pantalla.AgregarPunto(new Vector3(0.8f, 0.4f, -0.81f));
@@ -371,41 +412,47 @@ namespace HelloWorld
             return television;
         }
 
-        private Objeto CrearEquipoSonido(Vector3 posicion)
+        private Objeto CrearEquipoSonido(float[] posicion)
         {
-            Objeto equipoSonido = new Objeto(posicion);
-
+            Objeto equipoSonido = new Objeto();
+            equipoSonido.Posicion = posicion;
             // Creamos las partes del Equipor de Sonido
-            Parte altavoz = new Parte(posicion);
-            Parte bocina = new Parte(posicion);
-
+            Parte altavoz = new Parte();
+            altavoz.Posicion = posicion;
+            Parte bocina = new Parte();
+            bocina.Posicion = posicion;
             // Creamos las caras para el altavoz
-            Cara altavozCaraTrasera = new Cara(equipoSonido.Posicion, Color.Black);
+            Cara altavozCaraTrasera = new Cara(Color.Black);
+            altavozCaraTrasera.Posicion = posicion;
             altavozCaraTrasera.AgregarPunto(new Vector3(-1.6f + 0.6f, -0.9f, -0.7f));
             altavozCaraTrasera.AgregarPunto(new Vector3(-1.6f + 1.0f, -0.9f, -0.7f));
             altavozCaraTrasera.AgregarPunto(new Vector3(-1.6f + 1.0f, 0.1f, -0.7f));
             altavozCaraTrasera.AgregarPunto(new Vector3(-1.6f + 0.6f, 0.1f, -0.7f));
 
-            Cara altavozCaraDelantera = new Cara(equipoSonido.Posicion, Color.Black);
+            Cara altavozCaraDelantera = new Cara(Color.Black);
+            altavozCaraDelantera.Posicion = posicion;
             altavozCaraDelantera.AgregarPunto(new Vector3(-1.6f + 0.6f, -0.9f, -0.5f));
             altavozCaraDelantera.AgregarPunto(new Vector3(-1.6f + 1.0f, -0.9f, -0.5f));
             altavozCaraDelantera.AgregarPunto(new Vector3(-1.6f + 1.0f, 0.1f, -0.5f));
             altavozCaraDelantera.AgregarPunto(new Vector3(-1.6f + 0.6f, 0.1f, -0.5f));
 
-            Cara altavozCaraLateralIzq = new Cara(equipoSonido.Posicion, Color.Black);
+            Cara altavozCaraLateralIzq = new Cara(Color.Black);
+            altavozCaraLateralIzq.Posicion = posicion;
             altavozCaraLateralIzq.AgregarPunto(new Vector3(0.6f - 1.6f, -0.9f, -0.7f));
             altavozCaraLateralIzq.AgregarPunto(new Vector3(0.6f - 1.6f, -0.9f, -0.5f));
             altavozCaraLateralIzq.AgregarPunto(new Vector3(0.6f - 1.6f, 0.1f, -0.5f));
             altavozCaraLateralIzq.AgregarPunto(new Vector3(0.6f - 1.6f, 0.1f, -0.7f));
 
-            Cara altavozCaraLateralDer = new Cara(equipoSonido.Posicion, Color.Black);
+            Cara altavozCaraLateralDer = new Cara(Color.Black);
+            altavozCaraLateralDer.Posicion = posicion;
             altavozCaraLateralDer.AgregarPunto(new Vector3(1.0f - 1.6f, -0.9f, -0.7f));
             altavozCaraLateralDer.AgregarPunto(new Vector3(1.0f - 1.6f, -0.9f, -0.5f));
             altavozCaraLateralDer.AgregarPunto(new Vector3(1.0f - 1.6f, 0.1f, -0.5f));
             altavozCaraLateralDer.AgregarPunto(new Vector3(1.0f - 1.6f, 0.1f, -0.7f));
 
             //Bocina es una sola Cara
-            Cara bocinaTodo = new Cara(equipoSonido.Posicion, Color.DarkGray);
+            Cara bocinaTodo = new Cara(Color.DarkGray);
+            bocinaTodo.Posicion = posicion;
             float radio = 0.16f;
             Vector3 centro = new Vector3(-1.6f + 0.8f, -0.3f, -0.49f);
             int numPuntos = 20;
@@ -431,23 +478,28 @@ namespace HelloWorld
             return equipoSonido;
         }
 
-        private Objeto CrearFlorero(Vector3 posicion)
+        private Objeto CrearFlorero(float[] posicion)
         {
-            Objeto florero = new Objeto(posicion);
-
+            Objeto florero = new Objeto();
+            florero.Posicion = posicion;
             // Creamos las partes de la televisión
-            Parte baseFlorero = new Parte(posicion);
-            Parte talloFlorero = new Parte(posicion);
-            Parte petalosFlorero = new Parte(posicion);
+            Parte baseFlorero = new Parte();
+            baseFlorero.Posicion = posicion;
+            Parte talloFlorero = new Parte();
+            talloFlorero.Posicion = posicion;
+            Parte petalosFlorero = new Parte();
+            petalosFlorero.Posicion = posicion;
 
-            Cara baseFloreroDelantera = new Cara(florero.Posicion, Color.Green);
+            Cara baseFloreroDelantera = new Cara(Color.Green);
+            baseFloreroDelantera.Posicion = posicion;
             baseFloreroDelantera.AgregarPunto(new Vector3(-0.3f, 0.9f, -0.9f));
             baseFloreroDelantera.AgregarPunto(new Vector3(0.3f, 0.9f, -0.9f));
             baseFloreroDelantera.AgregarPunto(new Vector3(0.3f, 0.6f, -0.9f));
             baseFloreroDelantera.AgregarPunto(new Vector3(-0.3f, 0.6f, -0.9f));
 
             // Creamos las caras para el tallo del florero
-            Cara talloFrontal = new Cara(florero.Posicion, Color.Green);
+            Cara talloFrontal = new Cara(Color.Green);
+talloFrontal.Posicion = posicion;
             talloFrontal.AgregarPunto(new Vector3(-0.05f, 0.9f, -0.9f));
             talloFrontal.AgregarPunto(new Vector3(0.05f, 0.9f, -0.9f));
             talloFrontal.AgregarPunto(new Vector3(0.05f, 1.5f, -0.9f));
@@ -455,13 +507,15 @@ namespace HelloWorld
 
             // Creamos los pétalos de la flor
             List<Cara> petalosFloreroHojas = new List<Cara>();
+
             for (int i = 0; i < 10; i++)
             {
                 float angle = i * (float)Math.PI * 2 / 10;
                 float x = (float)Math.Sin(angle) * 0.4f;
                 float z = (float)Math.Cos(angle) * 0.4f;
 
-                var petalo = new Cara(florero.Posicion, Color.Yellow);
+                var petalo = new Cara(Color.Yellow);
+                petalo.Posicion = posicion;
                 petalo.AgregarPunto(new Vector3(0, 1.5f, -0.9f));
                 petalo.AgregarPunto(new Vector3(x, 1.53f, -0.9f + z));
                 petalo.AgregarPunto(new Vector3(0, 1.56f, -0.9f));
