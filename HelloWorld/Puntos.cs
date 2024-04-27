@@ -9,20 +9,13 @@ namespace HelloWorld
 {
     public class Puntos
     {
-        private List<Vector3> puntos = new List<Vector3>();
+        private List<float[]> puntos = new List<float[]>();
         public List<float[]> PuntosSimples
         {
-            get
-            {
-                return puntos.Select(v => new float[] { v.X, v.Y, v.Z }).ToList();
-            }
-            set
-            {
-                puntos = value.Select(a => new Vector3(a[0], a[1], a[2])).ToList();
-            }
+            get { return puntos; }
+            set { puntos = value; }
         }
         public Color color;
-        //public Dictionary<string, Vector3> puntos { get; } = new Dictionary<string, Vector3>();
 
         public Puntos(Color color)
         {
@@ -31,27 +24,32 @@ namespace HelloWorld
 
         public void AgregarPunto(Vector3 punto)
         {
-            puntos.Add(punto);
+            puntos.Add(new float[] { punto.X, punto.Y, punto.Z });
         }
 
-        public void TrazarPuntos(float[] posicion)
+        public void TrazarPuntos(Matrix4 transformacion)
         {
             if (puntos.Count < 3)
             {
                 throw new InvalidOperationException("Se necesitan al menos 3 puntos para formar una figura.");
             }
-            GL.PushMatrix();
-            GL.Translate(posicion[0], posicion[1], posicion[2]);
-            GL.Begin(PrimitiveType.Polygon);
-            GL.Color3(color);
+
+            // Aplicar la transformación acumulada a cada punto
+            List<float[]> puntosTransformados = new List<float[]>();
             foreach (var punto in puntos)
             {
-                GL.Vertex3(punto);
+                Vector4 puntoTransformado = Vector4.Transform(new Vector4(punto[0], punto[1], punto[2], 1.0f), transformacion);
+                puntosTransformados.Add(new float[] { puntoTransformado.X, puntoTransformado.Y, puntoTransformado.Z });
+            }
+
+            // Dibujar la figura
+            GL.Begin(PrimitiveType.Polygon);
+            GL.Color3(color);
+            foreach (var punto in puntosTransformados)
+            {
+                GL.Vertex3(punto[0], punto[1], punto[2]);
             }
             GL.End();
-            GL.PopMatrix(); // Restaurar la matriz de modelo-vista
-
         }
     }
-
 }
