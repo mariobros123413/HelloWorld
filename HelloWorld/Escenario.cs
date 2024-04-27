@@ -8,11 +8,13 @@ namespace HelloWorld
     [Serializable]
     public class Escenario
     {
+        public String Nombre;
         public Dictionary<String, Objeto> Objetos;
-        public Escenario()
+        public Escenario(String nombre)
         {
             Objetos = new Dictionary<string, Objeto>();
             Posicion = new float[3];
+            this.Nombre = nombre;
         }
 
         public float[] Posicion { get; set; }

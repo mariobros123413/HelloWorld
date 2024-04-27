@@ -5,70 +5,26 @@ using OpenTK.Graphics.OpenGL;
 using System.ComponentModel;
 using System.Drawing;
 using System.Collections.Generic;
-using System.IO;
-using System.Xml.Serialization;
-using Newtonsoft.Json;
-using System.Linq;
+using OpenTK.Input;
 
 namespace HelloWorld
 {
-    internal class Game : GameWindow
+    public class Game : GameWindow
     {
-        private float angle = 0.0f;
-        //private List<Escenario> list = new List<Escenario>();   
-        private List<Escenario> listaEscenarios = new List<Escenario>();
+        private float angle = 0.0f;   
+        public List<Escenario> listaEscenarios = new List<Escenario>();
+        public FormMenu menu;
 
         public Game(int width, int height) : base(width, height, GraphicsMode.Default, "Multiple TVs")
         {
-            Escenario escenario = new Escenario();
-            escenario.Posicion[0] = 1.0f; // Asigna la coordenada x
-            escenario.Posicion[1] = 1.0f; // Asigna la coordenada y
-            escenario.Posicion[2] = 1.0f; // Asigna la coordenada z
-
-
-            Objeto Television1 = CrearTelevision(new float[] { 0.0f, 0.0f, 0.0f });
-            escenario.AgregarObjeto("Television", Television1);
-            Objeto Television2 = CrearTelevision(new float[] { 3.0f, 0.0f, 0.0f });
-            escenario.AgregarObjeto("Television2", Television2);
-            Objeto Television3 = CrearTelevision(new float[] { 3.0f, 2.0f, 3.0f });
-            escenario.AgregarObjeto("Television3", Television3);
-            Objeto Bocina1 = CrearEquipoSonido(new float[] { 0.0f, 0.0f, 0.0f });
-            escenario.AgregarObjeto("Bocina1", Bocina1);
-            Objeto CrearFlorero1 = CrearFlorero(new float[] { 0.0f, 0.0f, 0.0f });
-            escenario.AgregarObjeto("CrearFlorero1", CrearFlorero1);
-            listaEscenarios.Add(escenario);
-
-            // Serializar el escenario a un archivo JSON
-            //
-            Escenario escenario2 = new Escenario();
-            escenario2.Posicion[0] = -1.0f; // Asigna la coordenada x
-            escenario2.Posicion[1] = -1.0f; // Asigna la coordenada y
-            escenario2.Posicion[2] = -1.0f; // Asigna la coordenada z
-
-
-            Objeto Television4 = CrearTelevision2(new float[] { 0.0f, 0.0f, 0.0f });
-            escenario2.AgregarObjeto("Television4", Television4);
-            Objeto Television5 = CrearTelevision2(new float[] { 3.0f, 0.0f, 0.0f });
-            escenario2.AgregarObjeto("Television5", Television5);
-            Objeto Television6 = CrearTelevision2(new float[] { 3.0f, 2.0f, 3.0f });
-            escenario2.AgregarObjeto("Television6", Television6);
-            Objeto Bocina2 = CrearEquipoSonido(new float[] { 0.0f, 0.0f, 0.0f });
-            escenario2.AgregarObjeto("Bocina2", Bocina2);
-            Objeto CrearFlorero2 = CrearFlorero(new float[] { 0.0f, 0.0f, 0.0f });
-            escenario2.AgregarObjeto("CrearFlorero2", CrearFlorero2);
-            listaEscenarios.Add(escenario2);
-            SerializarEscenario(@".\..\..\..\..\escenario.json", listaEscenarios);
-            //listaEscenarios = DeserializarEscenario(@".\..\..\..\..\escenario.json");
-
+            FormMenu menuForm = new FormMenu(this);
+         
+            
             Load += Game_Load;
             RenderFrame += Game_RenderFrame;
             UpdateFrame += Game_UpdateFrame;
             Closing += Game_Closing;
-        }
-        private List<Escenario> DeserializarEscenario(string filePath)
-        {
-            string json = File.ReadAllText(filePath);
-            return JsonConvert.DeserializeObject<List<Escenario>>(json);
+            menuForm.Show();
         }
         private void Game_Load(object sender, EventArgs e)
         {
@@ -122,7 +78,7 @@ namespace HelloWorld
             float camX = (float)Math.Sin(angle * Math.PI / 180.0) * distance;
             float camZ = (float)Math.Cos(angle * Math.PI / 180.0) * distance;
 
-            Vector3 cameraPosition = new Vector3(camX, 2, camZ); // 
+            Vector3 cameraPosition = new Vector3(camX, 2, camZ);
             Vector3 cameraTarget = new Vector3(0, 0, 0); // El objeto está en el origen
             Vector3 cameraUp = new Vector3(0, 1, 0);
 
@@ -149,22 +105,15 @@ namespace HelloWorld
         {
 
         }
-        private void SerializarEscenario(string nombreArchivo, List<Escenario> escenarios)
+        protected override void OnKeyDown(KeyboardKeyEventArgs e)
         {
-            JsonSerializerSettings settings = new JsonSerializerSettings
+            base.OnKeyDown(e);
+
+            if (e.Key == Key.F1)
             {
-                Formatting = Formatting.Indented,
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                PreserveReferencesHandling = PreserveReferencesHandling.None // Cambio aquí
-            };
-
-            string json = JsonConvert.SerializeObject(escenarios, settings);
-            File.WriteAllText(nombreArchivo, json);
+                menu.Show();
+            }
         }
-
-
-
-
         private Objeto CrearTelevision(float[] posicion)
         {
             Objeto television = new Objeto();
@@ -499,7 +448,7 @@ namespace HelloWorld
 
             // Creamos las caras para el tallo del florero
             Cara talloFrontal = new Cara(Color.Green);
-talloFrontal.Posicion = posicion;
+            talloFrontal.Posicion = posicion;
             talloFrontal.AgregarPunto(new Vector3(-0.05f, 0.9f, -0.9f));
             talloFrontal.AgregarPunto(new Vector3(0.05f, 0.9f, -0.9f));
             talloFrontal.AgregarPunto(new Vector3(0.05f, 1.5f, -0.9f));

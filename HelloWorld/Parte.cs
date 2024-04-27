@@ -1,8 +1,5 @@
-﻿using OpenTK;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
-using OpenTK.Graphics.OpenGL;
 namespace HelloWorld
 {
     [Serializable]
