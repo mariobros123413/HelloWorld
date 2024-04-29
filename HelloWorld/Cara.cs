@@ -9,7 +9,7 @@ namespace HelloWorld
     {
         public Puntos puntos;
         public float[] Posicion { get; set; } // Cambio de Vector3 a float[]
-
+        public Matrix4 Transformacion { get; set; }
         public Cara(Color color)
         {
             Posicion = new float[3];
@@ -21,7 +21,7 @@ namespace HelloWorld
             puntos.AgregarPunto(punto);
         }
 
-        public void TrazarPuntos(float[] posicion)
+        public void TrazarPuntos(Matrix4 posicion)
         {
             puntos.TrazarPuntos(posicion);
         }

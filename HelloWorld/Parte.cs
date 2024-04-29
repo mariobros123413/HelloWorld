@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenTK;
+using System;
 using System.Collections.Generic;
 namespace HelloWorld
 {
@@ -7,10 +8,12 @@ namespace HelloWorld
     {
         public Dictionary<string, Cara> caras { get; } = new Dictionary<string, Cara>();
         public float[] Posicion { get; set; } // Cambio de Vector3 a float[]
-        public Parte()
+        public Matrix4 Transformacion { get; private set; }
+        public Parte(float posX, float posY, float posZ)
         {
             caras = new Dictionary<string, Cara>();
             Posicion = new float[3];
+            Transformacion = Matrix4.CreateTranslation(posX, posY, posZ); // Aplicar traslación inicial
         }
         public void AgregarCara(string nombre, Cara cara)
         {
@@ -26,11 +29,12 @@ namespace HelloWorld
             return new Dictionary<string, Cara>(caras);
         }
 
-        public void Dibujar(float[] posicion)
+        public void Dibujar(Matrix4 transformacionPadre)
         {
+            Matrix4 transformacionGlobal = Transformacion * transformacionPadre;
             foreach (var cara in caras.Values)
             {
-                cara.TrazarPuntos(posicion);
+                cara.TrazarPuntos(transformacionGlobal);
             }
         }
     }

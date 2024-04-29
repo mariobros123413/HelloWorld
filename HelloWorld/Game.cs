@@ -11,15 +11,32 @@ namespace HelloWorld
 {
     public class Game : GameWindow
     {
-        private float angle = 0.0f;   
+        private float angle = 0.0f;
         public List<Escenario> listaEscenarios = new List<Escenario>();
         public FormMenu menu;
 
         public Game(int width, int height) : base(width, height, GraphicsMode.Default, "Multiple TVs")
         {
             FormMenu menuForm = new FormMenu(this);
-         
-            
+            Escenario escenarioPrincipal = new Escenario("Escenario 1", 0.0f, 0.0f, 0.0f);
+            Objeto objeto1 = new Objeto(0.0f, 0.0f, 0.0f);
+            // Configurar objetos y partes
+            objeto1 = CrearEquipoSonido(new float[] { 0, 0, 0 });
+            escenarioPrincipal.AgregarObjeto("Objeto 1", objeto1);
+
+            Objeto tv1 = new Objeto(0.0f, 0.0f, 0.0f);
+            tv1 = CrearTelevision(new float[] { 0, 0, 0 });
+            tv1.AplicarTraslacion(new Vector3(0, 0,0.0f));
+            escenarioPrincipal.AgregarObjeto("tv1", tv1);
+            // Aplicar alguna transformación inicial
+            escenarioPrincipal.AplicarTraslacion(new Vector3(0, 0, 0));
+            //escenarioPrincipal.AplicarRotacion(45, new Vector3(0, 0, 0));
+
+            tv1.AplicarRotacion(0, new Vector3(0, 0, 0));
+            tv1.AplicarEscalado(new Vector3(1f,1,1));
+            // Añadir el escenario a la lista de escenarios
+            listaEscenarios.Add(escenarioPrincipal);
+
             Load += Game_Load;
             RenderFrame += Game_RenderFrame;
             UpdateFrame += Game_UpdateFrame;
@@ -40,10 +57,11 @@ namespace HelloWorld
             foreach (var escenario in listaEscenarios)
             {
                 escenario.Dibujar();
+                escenario.Dibujar2(escenario.Transformacion);
             }
             SwapBuffers();
         }
-
+        
         private void SetupPerspective()
         {
             GL.MatrixMode(MatrixMode.Projection);
@@ -55,36 +73,36 @@ namespace HelloWorld
 
             GL.MatrixMode(MatrixMode.Modelview);
         }
-        //private void SetupCamera() //Sin rotación
-        //{
-        //    GL.MatrixMode(MatrixMode.Modelview);
-        //    GL.LoadIdentity();
-
-        //    // Configurar la vista de la cámara
-        //    Vector3 cameraPosition = new Vector3(3, -2, 3); // Posición de la cámara
-        //    Vector3 cameraTarget = new Vector3(0, 0, 0);   // Punto hacia el que mira la cámara
-        //    Vector3 cameraUp = new Vector3(0, 1, 0);       // Dirección "arriba" de la cámara
-
-        //    Matrix4 lookAt = Matrix4.LookAt(cameraPosition, cameraTarget, cameraUp);
-        //    GL.LoadMatrix(ref lookAt);
-        //}
-        private void SetupCamera() //con rotacion
+        private void SetupCamera() //Sin rotación
         {
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
 
-            float distance = 15.0f; // Distancia 
-
-            float camX = (float)Math.Sin(angle * Math.PI / 180.0) * distance;
-            float camZ = (float)Math.Cos(angle * Math.PI / 180.0) * distance;
-
-            Vector3 cameraPosition = new Vector3(camX, 2, camZ);
-            Vector3 cameraTarget = new Vector3(0, 0, 0); // El objeto está en el origen
-            Vector3 cameraUp = new Vector3(0, 1, 0);
+            // Configurar la vista de la cámara
+            Vector3 cameraPosition = new Vector3(-2, 2, 3); // Posición de la cámara
+            Vector3 cameraTarget = new Vector3(0, 0, 0);   // Punto hacia el que mira la cámara
+            Vector3 cameraUp = new Vector3(0, 1, 0);       // Dirección "arriba" de la cámara
 
             Matrix4 lookAt = Matrix4.LookAt(cameraPosition, cameraTarget, cameraUp);
             GL.LoadMatrix(ref lookAt);
         }
+        //private void SetupCamera() //con rotacion
+        //{
+        //    GL.MatrixMode(MatrixMode.Modelview);
+        //    GL.LoadIdentity();
+
+        //    float distance = 15.0f; // Distancia 
+
+        //    float camX = (float)Math.Sin(angle * Math.PI / 180.0) * distance;
+        //    float camZ = (float)Math.Cos(angle * Math.PI / 180.0) * distance;
+
+        //    Vector3 cameraPosition = new Vector3(camX, 2, camZ);
+        //    Vector3 cameraTarget = new Vector3(0, 0, 0); // El objeto está en el origen
+        //    Vector3 cameraUp = new Vector3(0, 1, 0);
+
+        //    Matrix4 lookAt = Matrix4.LookAt(cameraPosition, cameraTarget, cameraUp);
+        //    GL.LoadMatrix(ref lookAt);
+        //}
 
 
         private void Game_UpdateFrame(object sender, FrameEventArgs e)
@@ -116,12 +134,12 @@ namespace HelloWorld
         }
         private Objeto CrearTelevision(float[] posicion)
         {
-            Objeto television = new Objeto();
+            Objeto television = new Objeto(posicion[0], posicion[1], posicion[2]);
             television.Posicion = posicion;
             // Creamos las partes de la televisión
-            Parte baseTelevision = new Parte();
-            Parte marcoTelevision = new Parte();
-            Parte pantallaTelevision = new Parte();
+            Parte baseTelevision = new Parte(posicion[0], posicion[1], posicion[2]);
+            Parte marcoTelevision = new Parte(posicion[0], posicion[1], posicion[2]);
+            Parte pantallaTelevision = new Parte(posicion[0], posicion[1], posicion[2]);
 
             // Creamos las caras para la base del televisor
             Cara baseTrasera = new Cara(Color.BlueViolet);
@@ -216,11 +234,11 @@ namespace HelloWorld
             marcoTapaInferior.AgregarPunto(new Vector3(1.0f, -0.6f, -0.8f));
             marcoTapaInferior.AgregarPunto(new Vector3(1.0f, -0.6f, -1.0f));
 
-            baseTelevision.AgregarCara("Marco", marco);
-            baseTelevision.AgregarCara("MarcoLadoIzquierdo", marcoLadoIzquierdo);
-            baseTelevision.AgregarCara("MarcoLadoDerecho", marcoLadoDerecho);
-            baseTelevision.AgregarCara("MarcoTapaSuperior", marcoTapaSuperior);
-            baseTelevision.AgregarCara("MarcoTapaInferior", marcoTapaInferior);
+            marcoTelevision.AgregarCara("Marco", marco);
+            marcoTelevision.AgregarCara("MarcoLadoIzquierdo", marcoLadoIzquierdo);
+            marcoTelevision.AgregarCara("MarcoLadoDerecho", marcoLadoDerecho);
+            marcoTelevision.AgregarCara("MarcoTapaSuperior", marcoTapaSuperior);
+            marcoTelevision.AgregarCara("MarcoTapaInferior", marcoTapaInferior);
 
             Cara pantalla = new Cara(Color.DarkOrange);
             pantalla.Posicion = posicion;
@@ -241,15 +259,15 @@ namespace HelloWorld
 
         private Objeto CrearTelevision2(float[] posicion)
         {
-            Objeto television = new Objeto();
+            Objeto television = new Objeto(posicion[0], posicion[1], posicion[2]);
             television.Posicion = posicion;
 
             // Creamos las partes de la televisión
-            Parte baseTelevision = new Parte();
+            Parte baseTelevision = new Parte(posicion[0], posicion[1], posicion[2]);
             baseTelevision.Posicion = posicion;
-            Parte marcoTelevision = new Parte();
+            Parte marcoTelevision = new Parte(posicion[0], posicion[1], posicion[2]);
             marcoTelevision.Posicion = posicion;
-            Parte pantallaTelevision = new Parte();
+            Parte pantallaTelevision = new Parte(posicion[0], posicion[1], posicion[2]);
             pantallaTelevision.Posicion = posicion;
             // Creamos las caras para la base del televisor
             Cara baseTrasera = new Cara(Color.Magenta);
@@ -363,13 +381,12 @@ namespace HelloWorld
 
         private Objeto CrearEquipoSonido(float[] posicion)
         {
-            Objeto equipoSonido = new Objeto();
+            Objeto equipoSonido = new Objeto(posicion[0], posicion[1], posicion[2]);
             equipoSonido.Posicion = posicion;
             // Creamos las partes del Equipor de Sonido
-            Parte altavoz = new Parte();
-            altavoz.Posicion = posicion;
-            Parte bocina = new Parte();
-            bocina.Posicion = posicion;
+            Parte altavoz = new Parte(posicion[0], posicion[1], posicion[2]);
+            //altavoz.Posicion = posicion;
+            Parte bocina = new Parte(posicion[0], posicion[1], posicion[2]);
             // Creamos las caras para el altavoz
             Cara altavozCaraTrasera = new Cara(Color.Black);
             altavozCaraTrasera.Posicion = posicion;
@@ -417,8 +434,8 @@ namespace HelloWorld
             bocina.AgregarCara("AltavozCaraDelantera", altavozCaraDelantera);
             bocina.AgregarCara("AltavozCaraLateralIzq", altavozCaraLateralIzq);
             bocina.AgregarCara("AltavozCaraLateralDer", altavozCaraLateralDer);
-            bocina.AgregarCara("BocinaTodo", bocinaTodo);
 
+            altavoz.AgregarCara("Gris ", bocinaTodo);
 
             // Agregamos las partes al objeto Television
             equipoSonido.AgregarParte("Altavoz", altavoz);
@@ -427,64 +444,64 @@ namespace HelloWorld
             return equipoSonido;
         }
 
-        private Objeto CrearFlorero(float[] posicion)
-        {
-            Objeto florero = new Objeto();
-            florero.Posicion = posicion;
-            // Creamos las partes de la televisión
-            Parte baseFlorero = new Parte();
-            baseFlorero.Posicion = posicion;
-            Parte talloFlorero = new Parte();
-            talloFlorero.Posicion = posicion;
-            Parte petalosFlorero = new Parte();
-            petalosFlorero.Posicion = posicion;
+        //private Objeto CrearFlorero(float[] posicion)
+        //{
+        //    Objeto florero = new Objeto();
+        //    florero.Posicion = posicion;
+        //    // Creamos las partes de la televisión
+        //    Parte baseFlorero = new Parte();
+        //    baseFlorero.Posicion = posicion;
+        //    Parte talloFlorero = new Parte();
+        //    talloFlorero.Posicion = posicion;
+        //    Parte petalosFlorero = new Parte();
+        //    petalosFlorero.Posicion = posicion;
 
-            Cara baseFloreroDelantera = new Cara(Color.Green);
-            baseFloreroDelantera.Posicion = posicion;
-            baseFloreroDelantera.AgregarPunto(new Vector3(-0.3f, 0.9f, -0.9f));
-            baseFloreroDelantera.AgregarPunto(new Vector3(0.3f, 0.9f, -0.9f));
-            baseFloreroDelantera.AgregarPunto(new Vector3(0.3f, 0.6f, -0.9f));
-            baseFloreroDelantera.AgregarPunto(new Vector3(-0.3f, 0.6f, -0.9f));
+        //    Cara baseFloreroDelantera = new Cara(Color.Green);
+        //    baseFloreroDelantera.Posicion = posicion;
+        //    baseFloreroDelantera.AgregarPunto(new Vector3(-0.3f, 0.9f, -0.9f));
+        //    baseFloreroDelantera.AgregarPunto(new Vector3(0.3f, 0.9f, -0.9f));
+        //    baseFloreroDelantera.AgregarPunto(new Vector3(0.3f, 0.6f, -0.9f));
+        //    baseFloreroDelantera.AgregarPunto(new Vector3(-0.3f, 0.6f, -0.9f));
 
-            // Creamos las caras para el tallo del florero
-            Cara talloFrontal = new Cara(Color.Green);
-            talloFrontal.Posicion = posicion;
-            talloFrontal.AgregarPunto(new Vector3(-0.05f, 0.9f, -0.9f));
-            talloFrontal.AgregarPunto(new Vector3(0.05f, 0.9f, -0.9f));
-            talloFrontal.AgregarPunto(new Vector3(0.05f, 1.5f, -0.9f));
-            talloFrontal.AgregarPunto(new Vector3(-0.05f, 1.5f, -0.9f));
+        //    // Creamos las caras para el tallo del florero
+        //    Cara talloFrontal = new Cara(Color.Green);
+        //    talloFrontal.Posicion = posicion;
+        //    talloFrontal.AgregarPunto(new Vector3(-0.05f, 0.9f, -0.9f));
+        //    talloFrontal.AgregarPunto(new Vector3(0.05f, 0.9f, -0.9f));
+        //    talloFrontal.AgregarPunto(new Vector3(0.05f, 1.5f, -0.9f));
+        //    talloFrontal.AgregarPunto(new Vector3(-0.05f, 1.5f, -0.9f));
 
-            // Creamos los pétalos de la flor
-            List<Cara> petalosFloreroHojas = new List<Cara>();
+        //    // Creamos los pétalos de la flor
+        //    List<Cara> petalosFloreroHojas = new List<Cara>();
 
-            for (int i = 0; i < 10; i++)
-            {
-                float angle = i * (float)Math.PI * 2 / 10;
-                float x = (float)Math.Sin(angle) * 0.4f;
-                float z = (float)Math.Cos(angle) * 0.4f;
+        //    for (int i = 0; i < 10; i++)
+        //    {
+        //        float angle = i * (float)Math.PI * 2 / 10;
+        //        float x = (float)Math.Sin(angle) * 0.4f;
+        //        float z = (float)Math.Cos(angle) * 0.4f;
 
-                var petalo = new Cara(Color.Yellow);
-                petalo.Posicion = posicion;
-                petalo.AgregarPunto(new Vector3(0, 1.5f, -0.9f));
-                petalo.AgregarPunto(new Vector3(x, 1.53f, -0.9f + z));
-                petalo.AgregarPunto(new Vector3(0, 1.56f, -0.9f));
-                petalosFloreroHojas.Add(petalo);
-            }
+        //        var petalo = new Cara(Color.Yellow);
+        //        petalo.Posicion = posicion;
+        //        petalo.AgregarPunto(new Vector3(0, 1.5f, -0.9f));
+        //        petalo.AgregarPunto(new Vector3(x, 1.53f, -0.9f + z));
+        //        petalo.AgregarPunto(new Vector3(0, 1.56f, -0.9f));
+        //        petalosFloreroHojas.Add(petalo);
+        //    }
 
 
-            for (int i = 0; i < petalosFloreroHojas.Count; i++)
-            {
-                petalosFlorero.AgregarCara($"Petalo{i}", petalosFloreroHojas[i]);
+        //    for (int i = 0; i < petalosFloreroHojas.Count; i++)
+        //    {
+        //        petalosFlorero.AgregarCara($"Petalo{i}", petalosFloreroHojas[i]);
 
-            }
-            baseFlorero.AgregarCara("BaseFlorero", baseFloreroDelantera);
-            talloFlorero.AgregarCara("TalloFrontal", talloFrontal);
+        //    }
+        //    baseFlorero.AgregarCara("BaseFlorero", baseFloreroDelantera);
+        //    talloFlorero.AgregarCara("TalloFrontal", talloFrontal);
 
-            florero.AgregarParte("BaseFlorero", baseFlorero);
-            florero.AgregarParte("TalloFlorero", talloFlorero);
-            florero.AgregarParte("PetalosFlorero", petalosFlorero);
+        //    florero.AgregarParte("BaseFlorero", baseFlorero);
+        //    florero.AgregarParte("TalloFlorero", talloFlorero);
+        //    florero.AgregarParte("PetalosFlorero", petalosFlorero);
 
-            return florero;
-        }
+        //    return florero;
+        //}
     }
 }

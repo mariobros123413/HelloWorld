@@ -34,24 +34,30 @@ namespace HelloWorld
             puntos.Add(punto);
         }
 
-        public void TrazarPuntos(float[] posicion)
+        public void TrazarPuntos(Matrix4 transformacionPadre)
         {
             if (puntos.Count < 3)
             {
                 throw new InvalidOperationException("Se necesitan al menos 3 puntos para formar una figura.");
             }
+
             GL.PushMatrix();
-            GL.Translate(posicion[0], posicion[1], posicion[2]);
+            GL.MultMatrix(ref transformacionPadre); // Aplicar transformación del padre
+
             GL.Begin(PrimitiveType.Polygon);
             GL.Color3(color);
+
             foreach (var punto in puntos)
             {
-                GL.Vertex3(punto);
+                GL.Vertex3(Vector3.TransformPosition(punto, transformacionPadre)); // Aplicar transformación del padre a cada punto
             }
+
             GL.End();
             GL.PopMatrix(); // Restaurar la matriz de modelo-vista
-
         }
+
+
+
     }
 
 }

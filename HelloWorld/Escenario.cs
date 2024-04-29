@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using OpenTK.Graphics.OpenGL;
+using System.Drawing;
+using OpenTK.Graphics;
 
 namespace HelloWorld
 {
@@ -10,14 +12,16 @@ namespace HelloWorld
     {
         public String Nombre;
         public Dictionary<String, Objeto> Objetos;
-        public Escenario(String nombre)
+        public Matrix4 Transformacion { get; set; }
+        public float[] Posicion { get; set; }
+        public Escenario(String nombre, float posX, float posY, float posZ)
         {
             Objetos = new Dictionary<string, Objeto>();
-            Posicion = new float[3];
+            Posicion = new float[] { posX, posY, posZ };
             this.Nombre = nombre;
+            Transformacion = Matrix4.CreateTranslation(posX, posY, posZ); // Aplicar traslación inicial
         }
 
-        public float[] Posicion { get; set; }
         public void AgregarObjeto(String nombre, Objeto objeto)
         {
             Objetos.Add(nombre, objeto);
@@ -32,19 +36,113 @@ namespace HelloWorld
         {
             return new Dictionary<string, Escenario>();
         }
-
-        public void Dibujar()
+        public void AplicarTraslacion(Vector3 traslacion)
         {
-            GL.PushMatrix();
-            GL.Translate(Posicion[0], Posicion[1], Posicion[2]);
+            Transformacion = Matrix4.CreateTranslation(traslacion) * Transformacion;
+        }
 
+        public void AplicarRotacion(float angulo, Vector3 eje)
+        {
+            Transformacion = Matrix4.CreateRotationX(MathHelper.DegreesToRadians(angulo)) * Transformacion;
+        }
+
+        public void AplicarEscalado(Vector3 escala)
+        {
+            Transformacion = Matrix4.CreateScale(escala) * Transformacion;
+        }
+        public void Dibujar()  // Supongamos que es llamado por el renderizador en algún momento
+        {
             foreach (var objeto in Objetos.Values)
             {
-                objeto.Dibujar();
+                objeto.Dibujar(Transformacion);
             }
-
-            GL.PopMatrix();
         }
+        public void Dibujar2(Matrix4 transf)
+        {
+            GL.PushMatrix();
+            GL.MultMatrix(ref transf);
+
+            // Dibujar el eje X en rojo
+            GL.Color3(Color.Red);
+            GL.Begin(PrimitiveType.Lines);
+            GL.Vertex3(0.0f, 0.0f, 0.0f);
+            GL.Vertex3(2.0f, 0.0f, 0.0f);
+            GL.End();
+
+            // Dibujar el eje X en rojo
+            GL.Color3(Color.Red);
+            GL.Begin(PrimitiveType.Lines);
+            GL.Vertex3(0.0f, 0.0f, 0.0f);
+            GL.Vertex3(-2.0f, 0.0f, 0.0f);
+            GL.End();
+
+            GL.Color3(Color.White);
+            GL.Begin(PrimitiveType.Lines);
+            GL.Vertex3(-1.0f, 0.0f, -0.5f);
+            GL.Vertex3(-1.0f, 0.0f, 0.5f);
+            GL.End();
+
+            GL.Color3(Color.White);
+            GL.Begin(PrimitiveType.Lines);
+            GL.Vertex3(1.0f, 0.0f, -0.5f);
+            GL.Vertex3(1.0f, 0.0f, 0.5f);
+            GL.End();
+
+            // Dibujar el eje Y en verde
+            GL.Color3(Color.Green);
+            GL.Begin(PrimitiveType.Lines);
+            GL.Vertex3(0.0f, 0.0f, 0.0f);
+            GL.Vertex3(0.0f, 2.0f, 0.0f);
+            GL.End();
+            
+            // Dibujar el eje Y en verde
+            GL.Color3(Color.Green);
+            GL.Begin(PrimitiveType.Lines);
+            GL.Vertex3(0.0f, 0.0f, 0.0f);
+            GL.Vertex3(0.0f, -2.0f, 0.0f);
+            GL.End();
+
+            GL.Color3(Color.White);
+            GL.Begin(PrimitiveType.Lines);
+            GL.Vertex3(0.0f, 1.0f, -0.5f);
+            GL.Vertex3(0.0f, 1.0f, 0.5f);
+            GL.End();
+
+            GL.Color3(Color.White);
+            GL.Begin(PrimitiveType.Lines);
+            GL.Vertex3(0.0f, -1.0f, -0.5f);
+            GL.Vertex3(0.0f, -1.0f, 0.5f);
+            GL.End();
+
+            // Dibujar el eje Z en azul
+            GL.Color3(Color.Blue);
+            GL.Begin(PrimitiveType.Lines);
+            GL.Vertex3(0.0f, 0.0f, 0.0f);
+            GL.Vertex3(0.0f, 0.0f, 2.0f);
+            GL.End();
+
+            // Dibujar el eje Z en azul
+            GL.Color3(Color.Blue);
+            GL.Begin(PrimitiveType.Lines);
+            GL.Vertex3(0.0f, 0.0f, 0.0f);
+            GL.Vertex3(0.0f, 0.0f, -2.0f);
+            GL.End();
+            GL.Color3(Color.White);
+            GL.Begin(PrimitiveType.Lines);
+            GL.Vertex3(-0.5f, 0.0f, 1.0f);
+            GL.Vertex3(0.5f, 0.0f, 1.0f);
+            GL.End();
+
+            GL.Color3(Color.White);
+            GL.Begin(PrimitiveType.Lines);
+            GL.Vertex3(-0.5f, 0.0f, -1.0f);
+            GL.Vertex3(0.5f, 0.0f, -1.0f);
+            GL.End();
+            GL.PopMatrix();
+
+        }
+
+
 
     }
 }

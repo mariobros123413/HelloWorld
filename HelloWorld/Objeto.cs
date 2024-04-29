@@ -8,11 +8,13 @@ namespace HelloWorld
     public class Objeto
     {
         public Dictionary<string, Parte> partes;
+        public Matrix4 Transformacion { get; private set; }
         public float[] Posicion { get; set; } // Cambio de Vector3 a float[]
-        public Objeto()
+        public Objeto(float posX, float posY, float posZ )
         {
             Posicion = new float[3];
             partes = new Dictionary<string, Parte>();
+            Transformacion = Matrix4.CreateTranslation(posX, posY, posZ); // Aplicar traslación inicial
 
         }
 
@@ -27,12 +29,27 @@ namespace HelloWorld
         {
             return new Dictionary<string, Parte>(partes);
         }
-
-        public void Dibujar()
+        public void AplicarTraslacion(Vector3 traslacion)
         {
+            Transformacion = Matrix4.CreateTranslation(traslacion) * Transformacion;
+        }
+
+        public void AplicarRotacion(float angulo, Vector3 eje)
+        {
+            Transformacion = Matrix4.CreateRotationX(MathHelper.DegreesToRadians(angulo)) * Transformacion;
+        }
+
+        public void AplicarEscalado(Vector3 escala)
+        {
+            Transformacion = Matrix4.CreateScale(escala) * Transformacion;
+        }
+        public void Dibujar(Matrix4 transformacionPadre)
+        {
+            Matrix4 transformacionGlobal = Transformacion * transformacionPadre;
+
             foreach (var parte in partes.Values)
             {
-                parte.Dibujar(Posicion);
+                parte.Dibujar(transformacionGlobal);
             }
         }
     }
