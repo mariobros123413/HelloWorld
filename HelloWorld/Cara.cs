@@ -9,7 +9,6 @@ namespace HelloWorld
     {
         public Puntos puntos;
         public float[] Posicion { get; set; } // Cambio de Vector3 a float[]
-        public Matrix4 Transformacion { get; set; }
         public Cara(Color color)
         {
             Posicion = new float[3];

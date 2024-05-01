@@ -42,7 +42,6 @@ namespace HelloWorld
             }
 
             GL.PushMatrix();
-            GL.MultMatrix(ref transformacionPadre); // Aplicar transformación del padre
 
             GL.Begin(PrimitiveType.Polygon);
             GL.Color3(color);

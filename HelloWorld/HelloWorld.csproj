@@ -71,7 +71,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Puntos.cs" />
     <Compile Include="Serializador.cs" />
-    <Compile Include="Transformable.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
