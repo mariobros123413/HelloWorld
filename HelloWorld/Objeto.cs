@@ -8,37 +8,47 @@ namespace HelloWorld
     public class Objeto
     {
         public Dictionary<string, Parte> partes;
-        // Propiedades para almacenar los componentes de transformación
-        public Vector3 Traslacion { get; set; }
-        public Vector3 Rotacion { get; set; }
-        public Vector3 Escala { get; set; }
+        private Matrix4 TransformacionInicial { get; set; }
+        private Matrix4 Transformacion { get; set; }
+private Quaternion rotacionTotal = Quaternion.Identity;
+
         public float[] Posicion { get; set; } // Cambio de Vector3 a float[]
+        public float[] TransformacionSerializada
+        {
+            get
+            {
+                return new float[]
+                {
+                Transformacion.M11, Transformacion.M12, Transformacion.M13, Transformacion.M14,
+                Transformacion.M21, Transformacion.M22, Transformacion.M23, Transformacion.M24,
+                Transformacion.M31, Transformacion.M32, Transformacion.M33, Transformacion.M34,
+                Transformacion.M41, Transformacion.M42, Transformacion.M43, Transformacion.M44
+                };
+            }
+            set
+            {
+                if (value.Length == 16)
+                {
+                    Transformacion = new Matrix4(
+                        value[0], value[1], value[2], value[3],
+                        value[4], value[5], value[6], value[7],
+                        value[8], value[9], value[10], value[11],
+                        value[12], value[13], value[14], value[15]);
+                }
+                else
+                {
+                    throw new InvalidOperationException("Invalid matrix data");
+                }
+            }
+        }
         public Objeto(float posX, float posY, float posZ)
         {
-            Posicion = new float[3];
+            Posicion = new float[] { posX, posY, posZ };
             partes = new Dictionary<string, Parte>();
-            // Inicializar los componentes de transformación
-            Traslacion = Vector3.Zero;
-            Rotacion = Vector3.Zero;
-            Escala = Vector3.One;
+            Transformacion = Matrix4.Identity; // La transformación inicial es la identidad
+            TransformacionInicial = Matrix4.Identity; // Almacena la transformación inicial.
+
         }
-        public Matrix4 ObtenerTransformacion()
-        {
-            // Crear una matriz de escalado
-            Matrix4 matrizEscala = Matrix4.CreateScale(Escala);
-
-            // Crear una matriz de rotación
-            Matrix4 matrizRotacion = Matrix4.CreateFromAxisAngle(Vector3.UnitX, MathHelper.DegreesToRadians(Rotacion.X)) *
-                                     Matrix4.CreateFromAxisAngle(Vector3.UnitY, MathHelper.DegreesToRadians(Rotacion.Y)) *
-                                     Matrix4.CreateFromAxisAngle(Vector3.UnitZ, MathHelper.DegreesToRadians(Rotacion.Z));
-
-            // Crear una matriz de traslación
-            Matrix4 matrizTraslacion = Matrix4.CreateTranslation(Traslacion);
-
-            // Combinar las matrices en el orden correcto: primero escalado, luego rotación, y finalmente traslación
-            return matrizEscala * matrizRotacion * matrizTraslacion;
-        }
-
         public void AgregarParte(string nombre, Parte parte)
         {
             if (parte == null)
@@ -52,26 +62,44 @@ namespace HelloWorld
         }
         public void AplicarTraslacion(Vector3 traslacion)
         {
-            // Actualizar la traslación
-            Traslacion += traslacion;
+            Transformacion = Matrix4.CreateTranslation(traslacion) * Transformacion;
+            //Posicion = new float[] { Posicion[0]+traslacion.X, Posicion[1] + traslacion.Y , Posicion[2] + traslacion.Z };
         }
 
-        public void AplicarRotacion(float angulo, Vector3 eje)
+        public void AplicarRotacion(float incrementoAngulo, Vector3 eje)
         {
-            // Actualizar la rotación
-            Rotacion += eje * angulo;
+            // Recalcula la rotación desde el estado inicial con el ángulo acumulado actualizado.
+            Matrix4 rotacionActual = Matrix4.CreateFromAxisAngle(eje, MathHelper.DegreesToRadians(incrementoAngulo));
+            Transformacion = TransformacionInicial * rotacionActual; // Aplica la rotación a la matriz inicial.
         }
 
         public void AplicarEscalado(Vector3 escala)
         {
-            Escala *= escala;
+            Console.WriteLine("PREVIA \n" + Transformacion);
+
+            // Paso 1: Traslación inversa para mover el objeto al origen
+            Matrix4 traslacionInversa = Matrix4.CreateTranslation(-Posicion[0], -Posicion[1], -Posicion[2]);
+            Transformacion = traslacionInversa * Transformacion; // Mueve centro al origen
+
+            // Paso 2: Aplicar escalado en el origen
+            Matrix4 escalaMatriz = Matrix4.CreateScale(escala);
+            Transformacion = escalaMatriz * Transformacion; // Escala con centro en el origen
+
+            // Paso 3: Trasladar de vuelta a la posición original
+            Matrix4 traslacionOriginal = Matrix4.CreateTranslation(Posicion[0], Posicion[1], Posicion[2]);
+            Transformacion = traslacionOriginal * Transformacion; // Mueve centro de vuelta
+            TransformacionInicial = Transformacion;
+            Console.WriteLine("DESPUÉS \n" + Transformacion);
         }
+
+
+
 
         public void Dibujar(Matrix4 transformacionPadre)
         {
-            Matrix4 transformacionGlobal = ObtenerTransformacion() * transformacionPadre;
+            Matrix4 transformacionGlobal = Transformacion * transformacionPadre;
 
-            foreach (Parte parte in partes.Values)
+            foreach (var parte in partes.Values)
             {
                 parte.Dibujar(transformacionGlobal);
             }

@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Collections.Generic;
 using OpenTK.Input;
+using static HelloWorld.FormMenu;
 
 namespace HelloWorld
 {
@@ -14,7 +15,6 @@ namespace HelloWorld
         private float angle = 0.0f;
         public List<Escenario> listaEscenarios = new List<Escenario>();
         public FormMenu menu;
-
         public Game(int width, int height) : base(width, height, GraphicsMode.Default, "Multiple TVs")
         {
             FormMenu menuForm = new FormMenu(this);
@@ -23,7 +23,7 @@ namespace HelloWorld
             escenario.AplicarRotacion(45, new Vector3(1, 0, 0));
 
             Objeto Television1 = CrearTelevision(new float[] { 0.0f, 0.0f, 0.0f }, Color.CadetBlue, Color.BlueViolet, Color.DarkOrange);
-            Television1.AplicarRotacion(45, new Vector3(1,0,0));
+            Television1.AplicarRotacion(45, new Vector3(1, 0, 0));
             escenario.AgregarObjeto("Television", Television1);
             Objeto Television2 = CrearTelevision(new float[] { 3.0f, 0.0f, 0.0f }, Color.CadetBlue, Color.BlueViolet, Color.DarkOrange);
             escenario.AgregarObjeto("Television2", Television2);
@@ -37,16 +37,16 @@ namespace HelloWorld
 
             // Serializar el escenario a un archivo JSON
             //
-            Escenario escenario2 = new Escenario("Escenario 2", -1.0f, -1.0f,-1.0f);
+            Escenario escenario2 = new Escenario("Escenario 2", -1.0f, -1.0f, -1.0f);
 
 
             Objeto Television4 = CrearTelevision(new float[] { 0.0f, 0.0f, 0.0f }, Color.LightYellow, Color.Magenta, Color.DarkOrange);
-            Television4.AplicarTraslacion(new Vector3(-3,0,0));
+            Television4.AplicarTraslacion(new Vector3(-3, 0, 0));
             //Television4.partes["Base"].AplicarTraslacion(new Vector3(-2, 0, 0));
             //Television4.partes["Base"].AplicarRotacion(17,new Vector3(-2, 0, 0));
             //Television4.partes["Base"].AplicarEscalado(new Vector3(5, 5, 5));
             Television4.AplicarEscalado(new Vector3(5, 5, 5));
-            //Television4.AplicarRotacion(90, new Vector3(0,1,0));
+            //Television4.AplicarRotacion(90, new Vector3(0, 1, 0));
             escenario2.AgregarObjeto("Television4", Television4);
             Objeto Television5 = CrearTelevision(new float[] { 3f, 0.0f, 0.0f }, Color.LightYellow, Color.Magenta, Color.DarkOrange);
             escenario2.AgregarObjeto("Television5", Television5);
@@ -57,32 +57,17 @@ namespace HelloWorld
             Objeto CrearFlorero2 = CrearFlorero(new float[] { 0.0f, 0.0f, 0.0f });
             //CrearFlorero2.AplicarEscalado(new Vector3(5, 5, 5));
             escenario2.AgregarObjeto("CrearFlorero2", CrearFlorero2);
+            Objeto esfera = CrearEsfera();
+            esfera.AplicarEscalado(new Vector3(2, 2, 2));
+            escenario2.AgregarObjeto("esfera1", esfera);
             listaEscenarios.Add(escenario2);
-            //Escenario escenarioPrincipal = new Escenario("Escenario 1", 0.0f, 0.0f, 0.0f);
-            //Objeto objeto1 = new Objeto(0.0f, 0.0f, 0.0f);
-            //// Configurar objetos y partes
-            //objeto1 = CrearEquipoSonido(new float[] { 0, 0, 0 });
-            //escenarioPrincipal.AgregarObjeto("Objeto 1", objeto1);
-
-            //Objeto tv1 = new Objeto(0.0f, 0.0f, 0.0f);
-            //tv1 = CrearTelevision(new float[] { 0, 0, 0 });
-            //tv1.AplicarTraslacion(new Vector3(0, 0,1.0f));
-            //escenarioPrincipal.AgregarObjeto("tv1", tv1);
-            //// Aplicar alguna transformación inicial
-            //escenarioPrincipal.AplicarTraslacion(new Vector3(0, 0, 0));
-            ////escenarioPrincipal.AplicarRotacion(45, new Vector3(0, 0, 0));
-
-            //tv1.AplicarRotacion(0, new Vector3(0, 0, 0));
-            //tv1.AplicarEscalado(new Vector3(1f,1,1));
-            //// Añadir el escenario a la lista de escenarios
-            //listaEscenarios.Add(escenarioPrincipal);
-
             Load += Game_Load;
             RenderFrame += Game_RenderFrame;
             UpdateFrame += Game_UpdateFrame;
             Closing += Game_Closing;
             menuForm.Show();
         }
+
         private void Game_Load(object sender, EventArgs e)
         {
             GL.ClearColor(Color.FromArgb(5, 5, 25));
@@ -97,7 +82,7 @@ namespace HelloWorld
             foreach (var escenario in listaEscenarios)
             {
                 escenario.Dibujar();
-                escenario.Dibujar2(escenario.ObtenerTransformacion());
+                escenario.Dibujar2(escenario.getTransformacion());
             }
             SwapBuffers();
         }
@@ -155,8 +140,10 @@ namespace HelloWorld
             {
                 angle -= 360.0f;
             }
-            var escenario = listaEscenarios[0];
-            escenario.Objetos["Television"].AplicarRotacion(45, new Vector3(1, 0, 0));            // Actualizar camara
+            foreach (var escenario in listaEscenarios)
+            {
+                escenario.Dibujar();
+            }
             SetupCamera();
         }
         private void Game_Closing(object sender, CancelEventArgs e)
@@ -420,5 +407,44 @@ namespace HelloWorld
 
             return florero;
         }
+        private Objeto CrearEsfera()
+        {
+            Objeto esfera = new Objeto(1,1,1);
+
+            // Creamos la esfera
+            Parte cuerpoEsfera = new Parte(1, 1, 1);
+            Cara caraEsfera = new Cara(Color.Blue); // Supongamos que queremos una esfera azul
+
+            // Parámetros de la esfera
+            int latitud = 20; // Cantidad de divisiones verticales
+            int longitud = 20; // Cantidad de divisiones horizontales
+            float radio = 1.0f; // Radio de la esfera
+
+            // Generar puntos de la esfera
+            for (int i = 0; i <= latitud; i++)
+            {
+                double phi = Math.PI / latitud * i;
+                double cosPhi = Math.Cos(phi);
+                double sinPhi = Math.Sin(phi);
+
+                for (int j = 0; j <= longitud; j++)
+                {
+                    double theta = Math.PI * 2 / longitud * j;
+
+                    float x = (float)(radio * Math.Cos(theta) * sinPhi);
+                    float y = (float)(radio * cosPhi);
+                    float z = (float)(radio * Math.Sin(theta) * sinPhi);
+
+                    caraEsfera.AgregarPunto(new Vector3(x, y, z));
+                }
+            }
+
+            cuerpoEsfera.AgregarCara("CaraEsfera", caraEsfera);
+
+            esfera.AgregarParte("CuerpoEsfera", cuerpoEsfera);
+
+            return esfera;
+        }
+
     }
 }
