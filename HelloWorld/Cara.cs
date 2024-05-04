@@ -20,7 +20,7 @@ namespace HelloWorld
             puntos.AgregarPunto(punto);
         }
 
-        public void TrazarPuntos(Matrix4 posicion)
+        public void Dibujar(Matrix4 posicion)
         {
             puntos.TrazarPuntos(posicion);
         }

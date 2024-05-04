@@ -63,10 +63,10 @@ namespace HelloWorld
             Transformacion = Matrix4.CreateTranslation(traslacion) * Transformacion;
         }
 
-        public void AplicarRotacion(float incrementoAngulo, Vector3 eje)
+        public void AplicarRotacion(float incrementoAngulo, Vector4 eje)
         {
             // Recalcula la rotación desde el estado inicial con el ángulo acumulado actualizado.
-            Matrix4 rotacionActual = Matrix4.CreateFromAxisAngle(eje, MathHelper.DegreesToRadians(incrementoAngulo));
+            Matrix4 rotacionActual = Matrix4.CreateFromAxisAngle(new Vector3(eje.X, eje.Y, eje.Z), MathHelper.DegreesToRadians(incrementoAngulo));
             Transformacion = TransformacionInicial * rotacionActual; // Aplica la rotación a la matriz inicial.
         }
 
@@ -85,7 +85,7 @@ namespace HelloWorld
             Matrix4 transformacionGlobal = Transformacion * transformacionPadre;
             foreach (var cara in caras.Values)
             {
-                cara.TrazarPuntos(transformacionGlobal);
+                cara.Dibujar(transformacionGlobal);
             }
         }
     }

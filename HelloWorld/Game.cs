@@ -20,10 +20,10 @@ namespace HelloWorld
             FormMenu menuForm = new FormMenu(this);
 
             Escenario escenario = new Escenario("Escenario 1", 1.0f, 1.0f, 1.0f);
-            escenario.AplicarRotacion(45, new Vector3(1, 0, 0));
+            escenario.AplicarRotacion(45, new Vector4(1, 0, 0, 1));
 
             Objeto Television1 = CrearTelevision(new float[] { 0.0f, 0.0f, 0.0f }, Color.CadetBlue, Color.BlueViolet, Color.DarkOrange);
-            Television1.AplicarRotacion(45, new Vector3(1, 0, 0));
+            Television1.AplicarRotacion(45, new Vector4(1, 0, 0, 1));
             escenario.AgregarObjeto("Television", Television1);
             Objeto Television2 = CrearTelevision(new float[] { 3.0f, 0.0f, 0.0f }, Color.CadetBlue, Color.BlueViolet, Color.DarkOrange);
             escenario.AgregarObjeto("Television2", Television2);
@@ -57,9 +57,9 @@ namespace HelloWorld
             Objeto CrearFlorero2 = CrearFlorero(new float[] { 0.0f, 0.0f, 0.0f });
             //CrearFlorero2.AplicarEscalado(new Vector3(5, 5, 5));
             escenario2.AgregarObjeto("CrearFlorero2", CrearFlorero2);
-            Objeto esfera = CrearEsfera();
-            esfera.AplicarEscalado(new Vector3(2, 2, 2));
-            escenario2.AgregarObjeto("esfera1", esfera);
+            //Objeto esfera = CrearEsfera();
+            //esfera.AplicarEscalado(new Vector3(2, 2, 2));
+            //escenario2.AgregarObjeto("esfera1", esfera);
             listaEscenarios.Add(escenario2);
             Load += Game_Load;
             RenderFrame += Game_RenderFrame;
@@ -409,7 +409,7 @@ namespace HelloWorld
         }
         private Objeto CrearEsfera()
         {
-            Objeto esfera = new Objeto(1,1,1);
+            Objeto esfera = new Objeto(1, 1, 1);
 
             // Creamos la esfera
             Parte cuerpoEsfera = new Parte(1, 1, 1);

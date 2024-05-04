@@ -49,6 +49,7 @@ namespace HelloWorld
             Posicion = new float[] { posX, posY, posZ };
             this.Nombre = nombre;
             Transformacion = Matrix4.CreateTranslation(posX, posY, posZ);
+            TransformacionInicial = Matrix4.Identity;
         }
         public event EventHandler EscaladoCambiado;
         protected virtual void OnEscaladoCambiado(EventArgs e)
@@ -79,16 +80,16 @@ namespace HelloWorld
             Transformacion = Matrix4.CreateTranslation(traslacion) * Transformacion;
         }
 
-        public void AplicarRotacion(float incrementoAngulo, Vector3 eje)
+        public void AplicarRotacion(float incrementoAngulo, Vector4 eje)
         {
             // Recalcula la rotación desde el estado inicial con el ángulo acumulado actualizado.
-            Matrix4 rotacionActual = Matrix4.CreateFromAxisAngle(eje, MathHelper.DegreesToRadians(incrementoAngulo));
+            Matrix4 rotacionActual = Matrix4.CreateFromAxisAngle(new Vector3(eje.X,eje.Y,eje.Z), MathHelper.DegreesToRadians(incrementoAngulo));
             Transformacion = TransformacionInicial * rotacionActual; // Aplica la rotación a la matriz inicial.
         }
 
         public void AplicarEscalado(Vector3 escala)
         {
-            Transformacion = Matrix4.CreateScale(escala) * Transformacion;
+            Transformacion = Matrix4.CreateScale(escala) * TransformacionInicial;
         }
         public void Dibujar()  // Supongamos que es llamado por el renderizador en algún momento
         {

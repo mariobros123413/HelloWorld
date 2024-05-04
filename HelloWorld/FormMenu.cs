@@ -131,32 +131,32 @@ namespace HelloWorld
                     {
                         if (ejeXtextbox.Checked)
                         {
-                            escenario.AplicarRotacion(angulo, new Vector3(1, 0, 0));
+                            escenario.AplicarRotacion(angulo, new Vector4(1, 0, 0, 1));
                         }
 
                         if (ejeYtextbox.Checked)
-                            escenario.AplicarRotacion(angulo, new Vector3(0, 1, 0));
+                            escenario.AplicarRotacion(angulo, new Vector4(0, 1, 0, 1));
                         if (ejeZtextbox.Checked)
-                            escenario.AplicarRotacion(angulo, new Vector3(0, 0, 1));
+                            escenario.AplicarRotacion(angulo, new Vector4(0, 0, 1, 1));
 
                     }
                     else if (node.Tag is Objeto objeto)
                     {
                         if (ejeXtextbox.Checked)
-                            objeto.AplicarRotacion(angulo, new Vector3(1, 0, 0));
+                            objeto.AplicarRotacion(angulo, new Vector4(1, 0, 0, 1));
                         if (ejeYtextbox.Checked)
-                            objeto.AplicarRotacion(angulo, new Vector3(0, 1, 0));
+                            objeto.AplicarRotacion(angulo, new Vector4(0, 1, 0, 1));
                         if (ejeZtextbox.Checked)
-                            objeto.AplicarRotacion(angulo, new Vector3(0, 0, 1));
+                            objeto.AplicarRotacion(angulo, new Vector4(0, 0, 1, 1));
                     }
                     else if (node.Tag is Parte parte)
                     {
                         if (ejeXtextbox.Checked)
-                            parte.AplicarRotacion(angulo, new Vector3(1, 0, 0));
+                            parte.AplicarRotacion(angulo, new Vector4(1, 0, 0, 1));
                         if (ejeYtextbox.Checked)
-                            parte.AplicarRotacion(angulo, new Vector3(0, 1, 0));
+                            parte.AplicarRotacion(angulo, new Vector4(0, 1, 0, 1));
                         if (ejeZtextbox.Checked)
-                            parte.AplicarRotacion(angulo, new Vector3(0, 0, 1));
+                            parte.AplicarRotacion(angulo, new Vector4(0, 0, 1, 1));
                     }
                 }
                 // Recursivamente aplicar la función a los nodos hijos
