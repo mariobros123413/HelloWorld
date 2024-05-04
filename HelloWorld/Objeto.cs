@@ -9,43 +9,12 @@ namespace HelloWorld
     {
         public Dictionary<string, Parte> partes;
 
-        private Matrix4 Transformacion { get; set; }
-        private Matrix4 TransformacionInicial { get; set; }
         private Matrix4 MatrizTraslacion { get; set; }
         private Matrix4 MatrizEscalado { get; set; }
         private Matrix4 MatrizRotacionX { get; set; }
         private Matrix4 MatrizRotacionY { get; set; }
         private Matrix4 MatrizRotacionZ { get; set; }
         public float[] Posicion { get; set; } // Cambio de Vector3 a float[]
-        public float[] TransformacionSerializada
-        {
-            get
-            {
-                return new float[]
-                {
-                Transformacion.M11, Transformacion.M12, Transformacion.M13, Transformacion.M14,
-                Transformacion.M21, Transformacion.M22, Transformacion.M23, Transformacion.M24,
-                Transformacion.M31, Transformacion.M32, Transformacion.M33, Transformacion.M34,
-                Transformacion.M41, Transformacion.M42, Transformacion.M43, Transformacion.M44
-                };
-            }
-            set
-            {
-                if (value.Length == 16)
-                {
-                    Transformacion = new Matrix4(
-                        value[0], value[1], value[2], value[3],
-                        value[4], value[5], value[6], value[7],
-                        value[8], value[9], value[10], value[11],
-                        value[12], value[13], value[14], value[15]);
-                    TransformacionInicial = Transformacion;
-                }
-                else
-                {
-                    throw new InvalidOperationException("Invalid matrix data");
-                }
-            }
-        }
         public float[] PosicionSerializada
         {
             get { return Posicion; }
@@ -109,8 +78,6 @@ namespace HelloWorld
         {
             Posicion = new float[] { posX, posY, posZ };
             partes = new Dictionary<string, Parte>();
-            //Transformacion = Matrix4.Identity; // La transformación inicial es la identidad //ojo
-            TransformacionInicial = Matrix4.Identity;
             MatrizTraslacion = Matrix4.Identity;
             MatrizEscalado = Matrix4.Identity;
             MatrizRotacionX = Matrix4.Identity;
@@ -150,7 +117,8 @@ namespace HelloWorld
         public void Dibujar(Matrix4 transformacionPadre)
         {
             // Combinar todas las transformaciones
-            Matrix4 transformacionLocal = MatrizTraslacion * MatrizRotacionX * MatrizRotacionY * MatrizRotacionZ * MatrizEscalado;
+            //Matrix4 transformacionLocal = MatrizTraslacion * MatrizRotacionX * MatrizRotacionY * MatrizRotacionZ * MatrizEscalado;
+            Matrix4 transformacionLocal = MatrizRotacionX * MatrizRotacionY * MatrizRotacionZ * MatrizEscalado * MatrizTraslacion;
             Matrix4 transformacionGlobal = transformacionLocal * transformacionPadre;
 
             foreach (var parte in partes.Values)
