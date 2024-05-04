@@ -18,49 +18,6 @@ namespace HelloWorld
         public Game(int width, int height) : base(width, height, GraphicsMode.Default, "Multiple TVs")
         {
             FormMenu menuForm = new FormMenu(this);
-
-            Escenario escenario = new Escenario("Escenario 1", 1.0f, 1.0f, 1.0f);
-            escenario.AplicarRotacion(45, new Vector4(1, 0, 0, 1));
-
-            Objeto Television1 = CrearTelevision(new float[] { 0.0f, 0.0f, 0.0f }, Color.CadetBlue, Color.BlueViolet, Color.DarkOrange);
-            Television1.AplicarRotacion(45, new Vector4(1, 0, 0, 1));
-            escenario.AgregarObjeto("Television", Television1);
-            Objeto Television2 = CrearTelevision(new float[] { 3.0f, 0.0f, 0.0f }, Color.CadetBlue, Color.BlueViolet, Color.DarkOrange);
-            escenario.AgregarObjeto("Television2", Television2);
-            Objeto Television3 = CrearTelevision(new float[] { 3.0f, 2.0f, 3.0f }, Color.CadetBlue, Color.BlueViolet, Color.DarkOrange);
-            escenario.AgregarObjeto("Television3", Television3);
-            Objeto Bocina1 = CrearEquipoSonido(new float[] { 0.0f, 0.0f, 0.0f });
-            escenario.AgregarObjeto("Bocina1", Bocina1);
-            Objeto CrearFlorero1 = CrearFlorero(new float[] { 0.0f, 0.0f, 0.0f });
-            escenario.AgregarObjeto("CrearFlorero1", CrearFlorero1);
-            listaEscenarios.Add(escenario);
-
-            // Serializar el escenario a un archivo JSON
-            //
-            Escenario escenario2 = new Escenario("Escenario 2", -1.0f, -1.0f, -1.0f);
-
-
-            Objeto Television4 = CrearTelevision(new float[] { 0.0f, 0.0f, 0.0f }, Color.LightYellow, Color.Magenta, Color.DarkOrange);
-            Television4.AplicarTraslacion(new Vector3(-3, 0, 0));
-            //Television4.partes["Base"].AplicarTraslacion(new Vector3(-2, 0, 0));
-            //Television4.partes["Base"].AplicarRotacion(17,new Vector3(-2, 0, 0));
-            //Television4.partes["Base"].AplicarEscalado(new Vector3(5, 5, 5));
-            Television4.AplicarEscalado(new Vector3(5, 5, 5));
-            //Television4.AplicarRotacion(90, new Vector3(0, 1, 0));
-            escenario2.AgregarObjeto("Television4", Television4);
-            Objeto Television5 = CrearTelevision(new float[] { 3f, 0.0f, 0.0f }, Color.LightYellow, Color.Magenta, Color.DarkOrange);
-            escenario2.AgregarObjeto("Television5", Television5);
-            Objeto Television6 = CrearTelevision(new float[] { 3.0f, 2.0f, 3.0f }, Color.LightYellow, Color.Magenta, Color.DarkOrange);
-            escenario2.AgregarObjeto("Television6", Television6);
-            Objeto Bocina2 = CrearEquipoSonido(new float[] { 0.0f, 0.0f, 0.0f });
-            escenario2.AgregarObjeto("Bocina2", Bocina2);
-            Objeto CrearFlorero2 = CrearFlorero(new float[] { 0.0f, 0.0f, 0.0f });
-            //CrearFlorero2.AplicarEscalado(new Vector3(5, 5, 5));
-            escenario2.AgregarObjeto("CrearFlorero2", CrearFlorero2);
-            //Objeto esfera = CrearEsfera();
-            //esfera.AplicarEscalado(new Vector3(2, 2, 2));
-            //escenario2.AgregarObjeto("esfera1", esfera);
-            listaEscenarios.Add(escenario2);
             Load += Game_Load;
             RenderFrame += Game_RenderFrame;
             UpdateFrame += Game_UpdateFrame;
@@ -444,6 +401,75 @@ namespace HelloWorld
             esfera.AgregarParte("CuerpoEsfera", cuerpoEsfera);
 
             return esfera;
+        }
+        private Objeto CrearCubo()
+        {
+            Objeto cubo = new Objeto(0, 0, 0); // Centrado en el origen
+
+            // Dimensiones del cubo
+            float lado = 1.0f; // Lado del cubo
+            float semiLado = lado / 2;
+
+            // Colores para cada cara
+            Color[] colores = { Color.Red, Color.Green, Color.Blue, Color.Yellow, Color.Magenta, Color.Cyan };
+
+            Parte[] caras = new Parte[6];
+            for (int i = 0; i < 6; i++)
+            {
+                caras[i] = new Parte(0, 0, 0);
+                Cara caraCubo = new Cara(colores[i]);
+
+                // Puntos para cada cara
+                Vector3[] puntos = new Vector3[4];
+                switch (i)
+                {
+                    case 0: // Frente
+                        puntos[0] = new Vector3(-semiLado, -semiLado, semiLado);
+                        puntos[1] = new Vector3(semiLado, -semiLado, semiLado);
+                        puntos[2] = new Vector3(semiLado, semiLado, semiLado);
+                        puntos[3] = new Vector3(-semiLado, semiLado, semiLado);
+                        break;
+                    case 1: // Atrás
+                        puntos[0] = new Vector3(semiLado, -semiLado, -semiLado);
+                        puntos[1] = new Vector3(-semiLado, -semiLado, -semiLado);
+                        puntos[2] = new Vector3(-semiLado, semiLado, -semiLado);
+                        puntos[3] = new Vector3(semiLado, semiLado, -semiLado);
+                        break;
+                    case 2: // Izquierda
+                        puntos[0] = new Vector3(-semiLado, -semiLado, -semiLado);
+                        puntos[1] = new Vector3(-semiLado, -semiLado, semiLado);
+                        puntos[2] = new Vector3(-semiLado, semiLado, semiLado);
+                        puntos[3] = new Vector3(-semiLado, semiLado, -semiLado);
+                        break;
+                    case 3: // Derecha
+                        puntos[0] = new Vector3(semiLado, -semiLado, semiLado);
+                        puntos[1] = new Vector3(semiLado, -semiLado, -semiLado);
+                        puntos[2] = new Vector3(semiLado, semiLado, -semiLado);
+                        puntos[3] = new Vector3(semiLado, semiLado, semiLado);
+                        break;
+                    case 4: // Arriba
+                        puntos[0] = new Vector3(-semiLado, semiLado, semiLado);
+                        puntos[1] = new Vector3(semiLado, semiLado, semiLado);
+                        puntos[2] = new Vector3(semiLado, semiLado, -semiLado);
+                        puntos[3] = new Vector3(-semiLado, semiLado, -semiLado);
+                        break;
+                    case 5: // Abajo
+                        puntos[0] = new Vector3(-semiLado, -semiLado, -semiLado);
+                        puntos[1] = new Vector3(semiLado, -semiLado, -semiLado);
+                        puntos[2] = new Vector3(semiLado, -semiLado, semiLado);
+                        puntos[3] = new Vector3(-semiLado, -semiLado, semiLado);
+                        break;
+                }
+
+                foreach (Vector3 punto in puntos)
+                {
+                    caraCubo.AgregarPunto(punto);
+                }
+                caras[i].AgregarCara($"Cara{i + 1}", caraCubo);
+                cubo.AgregarParte($"Cara{i + 1}", caras[i]);
+            }
+
+            return cubo;
         }
 
     }

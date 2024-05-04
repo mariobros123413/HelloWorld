@@ -8,7 +8,7 @@ namespace HelloWorld
     public class Objeto
     {
         public Dictionary<string, Parte> partes;
-
+        private Matrix4 Transformacion { get; set; }
         private Matrix4 MatrizTraslacion { get; set; }
         private Matrix4 MatrizEscalado { get; set; }
         private Matrix4 MatrizRotacionX { get; set; }
@@ -113,13 +113,12 @@ namespace HelloWorld
         {
             MatrizEscalado = Matrix4.CreateScale(escala) * Matrix4.Identity;
         }
-
         public void Dibujar(Matrix4 transformacionPadre)
         {
             // Combinar todas las transformaciones
             //Matrix4 transformacionLocal = MatrizTraslacion * MatrizRotacionX * MatrizRotacionY * MatrizRotacionZ * MatrizEscalado;
-            Matrix4 transformacionLocal = MatrizRotacionX * MatrizRotacionY * MatrizRotacionZ * MatrizEscalado * MatrizTraslacion;
-            Matrix4 transformacionGlobal = transformacionLocal * transformacionPadre;
+            Transformacion = MatrizRotacionX * MatrizRotacionY * MatrizRotacionZ * MatrizEscalado * MatrizTraslacion;
+            Matrix4 transformacionGlobal = Transformacion * transformacionPadre;
 
             foreach (var parte in partes.Values)
             {

@@ -45,7 +45,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.label4 = new System.Windows.Forms.Label();
             this.ejeXtextbox = new System.Windows.Forms.CheckBox();
             this.ejeYtextbox = new System.Windows.Forms.CheckBox();
@@ -167,12 +166,12 @@
             0});
             this.numericUpDown_Angle.Location = new System.Drawing.Point(399, 180);
             this.numericUpDown_Angle.Maximum = new decimal(new int[] {
-            180,
+            360,
             0,
             0,
             0});
             this.numericUpDown_Angle.Minimum = new decimal(new int[] {
-            180,
+            360,
             0,
             0,
             -2147483648});
@@ -266,16 +265,6 @@
             this.label3.TabIndex = 13;
             this.label3.Text = "Rotación";
             // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(581, 162);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(86, 17);
-            this.checkBox1.TabIndex = 14;
-            this.checkBox1.Text = "Sobre su Eje";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            // 
             // label4
             // 
             this.label4.AutoSize = true;
@@ -324,7 +313,6 @@
             this.Controls.Add(this.ejeYtextbox);
             this.Controls.Add(this.ejeXtextbox);
             this.Controls.Add(this.label4);
-            this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -373,7 +361,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.CheckBox ejeXtextbox;
         private System.Windows.Forms.CheckBox ejeYtextbox;

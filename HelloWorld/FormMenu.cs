@@ -113,7 +113,6 @@ namespace HelloWorld
                 }
             }
         }
-        // Los métodos equivalentes para rotación y traslación seguirían el mismo patrón.
 
         public void rotationXYZ()
         {
@@ -126,7 +125,6 @@ namespace HelloWorld
             {
                 if (node.Checked)
                 {
-                    // Aplicar la escala basada en el tipo de objeto almacenado en Tag
                     if (node.Tag is Escenario escenario)
                     {
                         if (ejeXtextbox.Checked)
@@ -176,7 +174,6 @@ namespace HelloWorld
             {
                 if (node.Checked)
                 {
-                    // Aplicar la escala basada en el tipo de objeto almacenado en Tag
                     if (node.Tag is Escenario escenario)
                     {
                         escenario.AplicarTraslacion(new Vector3(traslationX, traslationY, traslationZ));
@@ -210,7 +207,6 @@ namespace HelloWorld
             {
                 if (node.Checked)
                 {
-                    // Aplicar la escala basada en el tipo de objeto almacenado en Tag
                     if (node.Tag is Escenario escenario)
                     {
                         escenario.AplicarEscalado(new Vector3(scaleX, scaleY, scaleZ));
