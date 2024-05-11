@@ -15,8 +15,11 @@ namespace HelloWorld
         private float angle = 0.0f;
         public List<Escenario> listaEscenarios = new List<Escenario>();
         public FormMenu menu;
+        private List<Accion> accionesPendientes = new List<Accion>();
+
         public Game(int width, int height) : base(width, height, GraphicsMode.Default, "Multiple TVs")
         {
+           
             FormMenu menuForm = new FormMenu(this);
             Load += Game_Load;
             RenderFrame += Game_RenderFrame;
@@ -29,6 +32,30 @@ namespace HelloWorld
         {
             GL.ClearColor(Color.FromArgb(5, 5, 25));
             GL.Enable(EnableCap.DepthTest);
+            Escenario escenario1 = new Escenario("Escenario 1", 0,0,0);
+
+            Objeto objeto = new Objeto(0, 0, 0);
+            objeto = CrearTelevision(new float[] {0,0,0}, Color.Beige, Color.Aquamarine, Color.Blue);
+            Accion traslacion = new AccionTraslacion(objeto, new Vector3(0, 0, 0), new Vector3(3, 0, 0), 5);
+            Accion rotacion = new AccionRotacion(objeto, 0, 180, new Vector4(0, 0, 1, 0), 5);
+            Accion escalado = new AccionEscalado(objeto, new Vector3(1, 1, 1), new Vector3(2, 2, 2), 5);
+
+            Objeto objeto2 = new Objeto(0, 0, 0);
+            objeto2 = CrearTelevision(new float[] { 0, 0, 0 }, Color.Beige, Color.Aquamarine, Color.Blue);
+            Accion traslacion2 = new AccionTraslacion(objeto2, new Vector3(0, 0, 0), new Vector3(-10, 10,10), 5);
+            Accion rotacion2 = new AccionRotacion(objeto2, 0, 180, new Vector4(0, 0, 1, 0), 5);
+            Accion escalado2 = new AccionEscalado(objeto2, new Vector3(1, 1, 1), new Vector3(2, 2, 2), 5);
+
+            escenario1.AgregarObjeto("Objeto accionado",objeto);
+            escenario1.AgregarObjeto("Objeto accionado 2", objeto2);
+            listaEscenarios.Add(escenario1);
+
+            AddAccion(traslacion);
+            AddAccion(rotacion);
+            AddAccion(escalado);
+            AddAccion(traslacion2);
+            AddAccion(rotacion2);
+            AddAccion(escalado2);
         }
 
         private void Game_RenderFrame(object sender, FrameEventArgs e)
@@ -101,6 +128,14 @@ namespace HelloWorld
             {
                 escenario.Dibujar();
             }
+            // Actualizar todas las acciones
+            foreach (var accion in accionesPendientes)
+            {
+                accion.Actualizar((float)e.Time);
+            }
+
+            // Limpiar las acciones finalizadas
+            accionesPendientes.RemoveAll(accion => accion.Finalizada());
             SetupCamera();
         }
         private void Game_Closing(object sender, CancelEventArgs e)
@@ -115,6 +150,10 @@ namespace HelloWorld
             {
                 menu.Show();
             }
+        }
+        public void AddAccion(Accion accion)
+        {
+            accionesPendientes.Add(accion);
         }
         private Objeto CrearTelevision(float[] posicion, Color marcoc, Color Base, Color pantallac)
         {

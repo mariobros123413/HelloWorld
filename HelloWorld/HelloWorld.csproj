@@ -56,6 +56,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Accion.cs" />
+    <Compile Include="AccionEscalado.cs" />
+    <Compile Include="AccionRotacion.cs" />
+    <Compile Include="AccionTraslacion.cs" />
     <Compile Include="Cara.cs" />
     <Compile Include="Escenario.cs" />
     <Compile Include="FormMenu.cs">

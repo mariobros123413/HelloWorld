@@ -74,6 +74,7 @@ namespace HelloWorld
                 throw new InvalidOperationException("Invalid matrix data");
             }
         }
+        public float UltimoAnguloAplicado { get; set; }
         public Objeto(float posX, float posY, float posZ)
         {
             Posicion = new float[] { posX, posY, posZ };
@@ -108,6 +109,7 @@ namespace HelloWorld
                 MatrizRotacionY = Matrix4.CreateFromAxisAngle(new Vector3(eje.X, eje.Y, eje.Z), MathHelper.DegreesToRadians(incrementoAngulo));
             else if (eje.Z != 0)
                 MatrizRotacionZ = Matrix4.CreateFromAxisAngle(new Vector3(eje.X, eje.Y, eje.Z), MathHelper.DegreesToRadians(incrementoAngulo));
+            UltimoAnguloAplicado = incrementoAngulo;
         }
         public void AplicarEscalado(Vector3 escala)
         {
