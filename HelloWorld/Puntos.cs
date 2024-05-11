@@ -50,6 +50,7 @@ namespace HelloWorld
                 GL.Vertex3(punto[0], punto[1], punto[2]);
             }
             GL.End();
+            GL.PopMatrix();
         }
     }
 }

@@ -40,7 +40,11 @@ namespace HelloWorld
             Matrix4 rotationMatrix = Matrix4.CreateRotationY(AnguloRotacion); // Crea la matriz de rotación
             Matrix4 finalTransform = LocalTransform * rotationMatrix * parentTransform; // Combina todas las transformaciones
 
-            foreach (var cara in Caras.Values)
+        public void Dibujar(Matrix4 transformacionPadre)
+        {
+            Matrix4 transformacionLocal = MatrizRotacionX * MatrizRotacionY * MatrizRotacionZ * MatrizEscalado * MatrizTraslacion;
+            Matrix4 transformacionGlobal = transformacionLocal * transformacionPadre;
+            foreach (var cara in caras.Values)
             {
                 cara.Dibujar(finalTransform);
             }
