@@ -259,5 +259,10 @@ namespace HelloWorld
         {
             rotationXYZ();
         }
+
+        private void serializacionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

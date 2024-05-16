@@ -101,6 +101,7 @@ namespace HelloWorld
             MatrizTraslacion = Matrix4.CreateTranslation(traslacion) * Matrix4.Identity;
             Posicion = new float[] { traslacion.X, traslacion.Y, traslacion.Z };
         }
+
         public void AplicarRotacion(float incrementoAngulo, Vector4 eje)
         {
             if (eje.X != 0)

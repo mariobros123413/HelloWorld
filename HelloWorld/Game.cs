@@ -19,7 +19,7 @@ namespace HelloWorld
 
         public Game(int width, int height) : base(width, height, GraphicsMode.Default, "Multiple TVs")
         {
-           
+
             FormMenu menuForm = new FormMenu(this);
             Load += Game_Load;
             RenderFrame += Game_RenderFrame;
@@ -32,30 +32,32 @@ namespace HelloWorld
         {
             GL.ClearColor(Color.FromArgb(5, 5, 25));
             GL.Enable(EnableCap.DepthTest);
-            Escenario escenario1 = new Escenario("Escenario 1", 0,0,0);
+            Escenario escenario1 = new Escenario("Escenario 1", 0, 0, 0);
 
             Objeto objeto = new Objeto(0, 0, 0);
-            objeto = CrearTelevision(new float[] {0,0,0}, Color.Beige, Color.Aquamarine, Color.Blue);
+            objeto = CrearTelevision(new float[] { 0, 0, 0 }, Color.Beige, Color.Aquamarine, Color.Blue);
             Accion traslacion = new AccionTraslacion(objeto, new Vector3(0, 0, 0), new Vector3(3, 0, 0), 5);
             Accion rotacion = new AccionRotacion(objeto, 0, 180, new Vector4(0, 0, 1, 0), 5);
             Accion escalado = new AccionEscalado(objeto, new Vector3(1, 1, 1), new Vector3(2, 2, 2), 5);
 
             Objeto objeto2 = new Objeto(0, 0, 0);
             objeto2 = CrearTelevision(new float[] { 0, 0, 0 }, Color.Beige, Color.Aquamarine, Color.Blue);
-            Accion traslacion2 = new AccionTraslacion(objeto2, new Vector3(0, 0, 0), new Vector3(-10, 10,10), 5);
-            Accion rotacion2 = new AccionRotacion(objeto2, 0, 180, new Vector4(0, 0, 1, 0), 5);
-            Accion escalado2 = new AccionEscalado(objeto2, new Vector3(1, 1, 1), new Vector3(2, 2, 2), 5);
+            Accion parabola = new AccionMovimientoParabolico(objeto2, 75f, 10f, 9.8f,3, 0.8f);
+            //Accion traslacion2 = new AccionTraslacion(objeto2, new Vector3(0, 0, 0), new Vector3(-10, 10, 10), 5);
+            //Accion rotacion2 = new AccionRotacion(objeto2, 0, 180, new Vector4(0, 0, 1, 0), 5);
+            //Accion escalado2 = new AccionEscalado(objeto2, new Vector3(1, 1, 1), new Vector3(2, 2, 2), 5);
 
-            escenario1.AgregarObjeto("Objeto accionado",objeto);
+            //escenario1.AgregarObjeto("Objeto accionado", objeto);
             escenario1.AgregarObjeto("Objeto accionado 2", objeto2);
             listaEscenarios.Add(escenario1);
 
             AddAccion(traslacion);
             AddAccion(rotacion);
             AddAccion(escalado);
-            AddAccion(traslacion2);
-            AddAccion(rotacion2);
-            AddAccion(escalado2);
+            //AddAccion(traslacion2);
+            //AddAccion(rotacion2);
+            //AddAccion(escalado2);
+            AddAccion(parabola);
         }
 
         private void Game_RenderFrame(object sender, FrameEventArgs e)
@@ -66,7 +68,14 @@ namespace HelloWorld
             foreach (var escenario in listaEscenarios)
             {
                 escenario.Dibujar();
-                escenario.Dibujar2(escenario.getTransformacion());
+                //escenario.Dibujar2(escenario.getTransformacion());
+                foreach (var objetos in escenario.Objetos)
+                {
+                    foreach (var partes in objetos.Value.partes)
+                    {
+                        //partes.Value.Dibujar2(partes.Value.getTransformacion());
+                    }
+                }
             }
             SwapBuffers();
         }
@@ -82,36 +91,36 @@ namespace HelloWorld
 
             GL.MatrixMode(MatrixMode.Modelview);
         }
-        //private void SetupCamera() //Sin rotación
-        //{
-        //    GL.MatrixMode(MatrixMode.Modelview);
-        //    GL.LoadIdentity();
-
-        //    // Configurar la vista de la cámara
-        //    Vector3 cameraPosition = new Vector3(-2, 2, 8); // Posición de la cámara
-        //    Vector3 cameraTarget = new Vector3(0, 0, 0);   // Punto hacia el que mira la cámara
-        //    Vector3 cameraUp = new Vector3(0, 1, 0);       // Dirección "arriba" de la cámara
-
-        //    Matrix4 lookAt = Matrix4.LookAt(cameraPosition, cameraTarget, cameraUp);
-        //    GL.LoadMatrix(ref lookAt);
-        //}
-        private void SetupCamera() //con rotacion
+        private void SetupCamera() //Sin rotación
         {
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
 
-            float distance = 15.0f; // Distancia 
-
-            float camX = (float)Math.Sin(angle * Math.PI / 180.0) * distance;
-            float camZ = (float)Math.Cos(angle * Math.PI / 180.0) * distance;
-
-            Vector3 cameraPosition = new Vector3(camX, 2, camZ);
-            Vector3 cameraTarget = new Vector3(0, 0, 0); // El objeto está en el origen
-            Vector3 cameraUp = new Vector3(0, 1, 0);
+            // Configurar la vista de la cámara
+            Vector3 cameraPosition = new Vector3(-2, 2, 8); // Posición de la cámara
+            Vector3 cameraTarget = new Vector3(0, 0, 0);   // Punto hacia el que mira la cámara
+            Vector3 cameraUp = new Vector3(0, 1, 0);       // Dirección "arriba" de la cámara
 
             Matrix4 lookAt = Matrix4.LookAt(cameraPosition, cameraTarget, cameraUp);
             GL.LoadMatrix(ref lookAt);
         }
+        //private void SetupCamera() //con rotacion
+        //{
+        //    GL.MatrixMode(MatrixMode.Modelview);
+        //    GL.LoadIdentity();
+
+        //    float distance = 15.0f; // Distancia 
+
+        //    float camX = (float)Math.Sin(angle * Math.PI / 180.0) * distance;
+        //    float camZ = (float)Math.Cos(angle * Math.PI / 180.0) * distance;
+
+        //    Vector3 cameraPosition = new Vector3(camX, 2, camZ);
+        //    Vector3 cameraTarget = new Vector3(0, 0, 0); // El objeto está en el origen
+        //    Vector3 cameraUp = new Vector3(0, 1, 0);
+
+        //    Matrix4 lookAt = Matrix4.LookAt(cameraPosition, cameraTarget, cameraUp);
+        //    GL.LoadMatrix(ref lookAt);
+        //}
 
 
         private void Game_UpdateFrame(object sender, FrameEventArgs e)

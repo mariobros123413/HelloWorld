@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="Accion.cs" />
     <Compile Include="AccionEscalado.cs" />
+    <Compile Include="AccionMovimientoParabolico.cs" />
     <Compile Include="AccionRotacion.cs" />
     <Compile Include="AccionTraslacion.cs" />
     <Compile Include="Cara.cs" />
