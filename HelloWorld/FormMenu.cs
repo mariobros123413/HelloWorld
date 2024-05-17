@@ -13,8 +13,9 @@ namespace HelloWorld
 {
     public partial class FormMenu : Form
     {
-        private Game game;
+        public List<Accion> accionesPendientes = new List<Accion>();
 
+        private Game game;
         public FormMenu(Game game)
         {
             InitializeComponent();
@@ -52,7 +53,28 @@ namespace HelloWorld
             }
         }
 
-
+        public void accionParabola()
+        {
+            float angle = (float)numericUpDown_Angle_Parabola.Value;
+            float vel = (float)numericUpDown_Vel_Inicial_Parabola.Value;
+            accionParabolaANodos(treeView1.Nodes, angle, vel);
+        }
+        private void accionParabolaANodos(TreeNodeCollection nodes, float angle, float vel)
+        {
+            foreach (TreeNode node in nodes)
+            {
+                if (node.Checked)
+                {
+                    if (node.Tag is Objeto objeto)
+                    {
+                        Accion parabola = new AccionMovimientoParabolico(objeto, angle, vel, 9.8f, 10000, 0.8f);
+                        AddAccion(parabola);
+                    }
+                }
+                // Recursivamente aplicar la función a los nodos hijos
+                accionParabolaANodos(node.Nodes, angle, vel);
+            }
+        }
         private void FormMenu_FormClosing(object sender, FormClosingEventArgs e)
         {
             e.Cancel = true;
@@ -226,6 +248,11 @@ namespace HelloWorld
                 AplicarEscaladoANodos(node.Nodes, scaleX, scaleY, scaleZ);
             }
         }
+
+        public void AddAccion(Accion accion)
+        {
+            accionesPendientes.Add(accion);
+        }
         private void numericUpDown_Scaling_X_ValueChanged(object sender, EventArgs e)
         {
             escalarXYZ();
@@ -263,6 +290,16 @@ namespace HelloWorld
         private void serializacionToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void numericUpDown_Angle_Parabola_ValueChanged(object sender, EventArgs e)
+        {
+            accionParabola();
+        }
+
+        private void numericUpDown_Vel_Inicial_Parabola_ValueChanged(object sender, EventArgs e)
+        {
+            accionParabola();
         }
     }
 }

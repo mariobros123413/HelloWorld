@@ -128,5 +128,16 @@ namespace HelloWorld
                 parte.Dibujar(transformacionGlobal);
             }
         }
+
+        public bool ColisionaCon(Objeto otroObjeto)
+        {
+            float distancia = (float)Math.Sqrt(
+                Math.Pow(Posicion[0] - otroObjeto.Posicion[0], 2) +
+                Math.Pow(Posicion[1] - otroObjeto.Posicion[1], 2) +
+                Math.Pow(Posicion[2] - otroObjeto.Posicion[2], 2)
+            );
+            // Asumimos un radio de colisión de 1 unidad para ambos objetos
+            return distancia < 1.0f;
+        }
     }
 }

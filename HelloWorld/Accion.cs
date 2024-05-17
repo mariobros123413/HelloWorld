@@ -7,11 +7,12 @@ using System.Threading.Tasks;
 
 namespace HelloWorld
 {
+    [Serializable]
     public abstract class Accion
     {
-        protected Objeto objeto;
-        protected float duracion; // Duración en segundos
-        protected float tiempoTranscurrido; // Tiempo transcurrido en segundos
+        public Objeto objeto;
+        public float duracion; // Duración en segundos
+        public float tiempoTranscurrido; // Tiempo transcurrido en segundos
         public Accion(Objeto objeto, float duracion)
         {
             this.objeto = objeto;

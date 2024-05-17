@@ -19,19 +19,6 @@ namespace HelloWorld
 
         public Game(int width, int height) : base(width, height, GraphicsMode.Default, "Multiple TVs")
         {
-
-            FormMenu menuForm = new FormMenu(this);
-            Load += Game_Load;
-            RenderFrame += Game_RenderFrame;
-            UpdateFrame += Game_UpdateFrame;
-            Closing += Game_Closing;
-            menuForm.Show();
-        }
-
-        private void Game_Load(object sender, EventArgs e)
-        {
-            GL.ClearColor(Color.FromArgb(5, 5, 25));
-            GL.Enable(EnableCap.DepthTest);
             Escenario escenario1 = new Escenario("Escenario 1", 0, 0, 0);
 
             Objeto objeto = new Objeto(0, 0, 0);
@@ -42,7 +29,7 @@ namespace HelloWorld
 
             Objeto objeto2 = new Objeto(0, 0, 0);
             objeto2 = CrearTelevision(new float[] { 0, 0, 0 }, Color.Beige, Color.Aquamarine, Color.Blue);
-            Accion parabola = new AccionMovimientoParabolico(objeto2, 75f, 7f, 9.8f,20, 0.8f);
+            Accion parabola = new AccionMovimientoParabolico(objeto2, 75f, 7f, 9.8f, 20, 0.8f);
             //Accion traslacion2 = new AccionTraslacion(objeto2, new Vector3(0, 0, 0), new Vector3(-10, 10, 10), 5);
             //Accion rotacion2 = new AccionRotacion(objeto2, 0, 180, new Vector4(0, 0, 1, 0), 5);
             //Accion escalado2 = new AccionEscalado(objeto2, new Vector3(1, 1, 1), new Vector3(2, 2, 2), 5);
@@ -58,6 +45,20 @@ namespace HelloWorld
             //AddAccion(rotacion2);
             //AddAccion(escalado2);
             AddAccion(parabola);
+            FormMenu menuForm = new FormMenu(this);
+            accionesPendientes = menuForm.accionesPendientes;
+            Load += Game_Load;
+            RenderFrame += Game_RenderFrame;
+            UpdateFrame += Game_UpdateFrame;
+            Closing += Game_Closing;
+            menuForm.Show();
+        }
+
+        private void Game_Load(object sender, EventArgs e)
+        {
+            GL.ClearColor(Color.FromArgb(5, 5, 25));
+            GL.Enable(EnableCap.DepthTest);
+
         }
 
         private void Game_RenderFrame(object sender, FrameEventArgs e)

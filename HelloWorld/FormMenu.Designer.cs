@@ -49,6 +49,12 @@
             this.ejeXtextbox = new System.Windows.Forms.CheckBox();
             this.ejeYtextbox = new System.Windows.Forms.CheckBox();
             this.ejeZtextbox = new System.Windows.Forms.CheckBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.numericUpDown_Angle_Parabola = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown_Vel_Inicial_Parabola = new System.Windows.Forms.NumericUpDown();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_Traslation_X)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_Traslation_Y)).BeginInit();
@@ -57,6 +63,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_Scaling_X)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_Scaling_Y)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_Scaling_Z)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_Angle_Parabola)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_Vel_Inicial_Parabola)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -83,14 +91,14 @@
             // guardarToolStripMenuItem
             // 
             this.guardarToolStripMenuItem.Name = "guardarToolStripMenuItem";
-            this.guardarToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.guardarToolStripMenuItem.Size = new System.Drawing.Size(145, 26);
             this.guardarToolStripMenuItem.Text = "Guardar";
             this.guardarToolStripMenuItem.Click += new System.EventHandler(this.guardarToolStripMenuItem_Click);
             // 
             // abrirToolStripMenuItem
             // 
             this.abrirToolStripMenuItem.Name = "abrirToolStripMenuItem";
-            this.abrirToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.abrirToolStripMenuItem.Size = new System.Drawing.Size(145, 26);
             this.abrirToolStripMenuItem.Text = "Abrir";
             this.abrirToolStripMenuItem.Click += new System.EventHandler(this.abrirToolStripMenuItem_Click);
             // 
@@ -98,7 +106,7 @@
             // 
             this.treeView1.CheckBoxes = true;
             this.treeView1.Location = new System.Drawing.Point(139, 80);
-            this.treeView1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.treeView1.Margin = new System.Windows.Forms.Padding(4);
             this.treeView1.Name = "treeView1";
             this.treeView1.Size = new System.Drawing.Size(233, 372);
             this.treeView1.TabIndex = 1;
@@ -112,7 +120,7 @@
             0,
             65536});
             this.numericUpDown_Traslation_X.Location = new System.Drawing.Point(473, 96);
-            this.numericUpDown_Traslation_X.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.numericUpDown_Traslation_X.Margin = new System.Windows.Forms.Padding(4);
             this.numericUpDown_Traslation_X.Minimum = new decimal(new int[] {
             100,
             0,
@@ -132,7 +140,7 @@
             0,
             65536});
             this.numericUpDown_Traslation_Y.Location = new System.Drawing.Point(473, 128);
-            this.numericUpDown_Traslation_Y.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.numericUpDown_Traslation_Y.Margin = new System.Windows.Forms.Padding(4);
             this.numericUpDown_Traslation_Y.Minimum = new decimal(new int[] {
             100,
             0,
@@ -152,7 +160,7 @@
             0,
             65536});
             this.numericUpDown_Traslation_Z.Location = new System.Drawing.Point(473, 160);
-            this.numericUpDown_Traslation_Z.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.numericUpDown_Traslation_Z.Margin = new System.Windows.Forms.Padding(4);
             this.numericUpDown_Traslation_Z.Minimum = new decimal(new int[] {
             100,
             0,
@@ -171,7 +179,7 @@
             0,
             0});
             this.numericUpDown_Angle.Location = new System.Drawing.Point(532, 222);
-            this.numericUpDown_Angle.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.numericUpDown_Angle.Margin = new System.Windows.Forms.Padding(4);
             this.numericUpDown_Angle.Maximum = new decimal(new int[] {
             360,
             0,
@@ -196,7 +204,7 @@
             0,
             65536});
             this.numericUpDown_Scaling_X.Location = new System.Drawing.Point(473, 337);
-            this.numericUpDown_Scaling_X.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.numericUpDown_Scaling_X.Margin = new System.Windows.Forms.Padding(4);
             this.numericUpDown_Scaling_X.Name = "numericUpDown_Scaling_X";
             this.numericUpDown_Scaling_X.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.numericUpDown_Scaling_X.Size = new System.Drawing.Size(160, 22);
@@ -217,7 +225,7 @@
             0,
             65536});
             this.numericUpDown_Scaling_Y.Location = new System.Drawing.Point(473, 369);
-            this.numericUpDown_Scaling_Y.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.numericUpDown_Scaling_Y.Margin = new System.Windows.Forms.Padding(4);
             this.numericUpDown_Scaling_Y.Name = "numericUpDown_Scaling_Y";
             this.numericUpDown_Scaling_Y.Size = new System.Drawing.Size(160, 22);
             this.numericUpDown_Scaling_Y.TabIndex = 9;
@@ -237,7 +245,7 @@
             0,
             65536});
             this.numericUpDown_Scaling_Z.Location = new System.Drawing.Point(473, 401);
-            this.numericUpDown_Scaling_Z.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.numericUpDown_Scaling_Z.Margin = new System.Windows.Forms.Padding(4);
             this.numericUpDown_Scaling_Z.Name = "numericUpDown_Scaling_Z";
             this.numericUpDown_Scaling_Z.Size = new System.Drawing.Size(160, 22);
             this.numericUpDown_Scaling_Z.TabIndex = 10;
@@ -292,7 +300,7 @@
             // 
             this.ejeXtextbox.AutoSize = true;
             this.ejeXtextbox.Location = new System.Drawing.Point(473, 254);
-            this.ejeXtextbox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.ejeXtextbox.Margin = new System.Windows.Forms.Padding(4);
             this.ejeXtextbox.Name = "ejeXtextbox";
             this.ejeXtextbox.Size = new System.Drawing.Size(60, 20);
             this.ejeXtextbox.TabIndex = 16;
@@ -303,7 +311,7 @@
             // 
             this.ejeYtextbox.AutoSize = true;
             this.ejeYtextbox.Location = new System.Drawing.Point(565, 254);
-            this.ejeYtextbox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.ejeYtextbox.Margin = new System.Windows.Forms.Padding(4);
             this.ejeYtextbox.Name = "ejeYtextbox";
             this.ejeYtextbox.Size = new System.Drawing.Size(61, 20);
             this.ejeYtextbox.TabIndex = 17;
@@ -314,18 +322,82 @@
             // 
             this.ejeZtextbox.AutoSize = true;
             this.ejeZtextbox.Location = new System.Drawing.Point(661, 254);
-            this.ejeZtextbox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.ejeZtextbox.Margin = new System.Windows.Forms.Padding(4);
             this.ejeZtextbox.Name = "ejeZtextbox";
             this.ejeZtextbox.Size = new System.Drawing.Size(60, 20);
             this.ejeZtextbox.TabIndex = 18;
             this.ejeZtextbox.Text = "Eje Z";
             this.ejeZtextbox.UseVisualStyleBackColor = true;
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(775, 90);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(63, 16);
+            this.label5.TabIndex = 19;
+            this.label5.Text = "Acciones";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(775, 134);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(115, 16);
+            this.label6.TabIndex = 20;
+            this.label6.Text = "Generar Parabola";
+            // 
+            // numericUpDown_Angle_Parabola
+            // 
+            this.numericUpDown_Angle_Parabola.Location = new System.Drawing.Point(885, 179);
+            this.numericUpDown_Angle_Parabola.Maximum = new decimal(new int[] {
+            180,
+            0,
+            0,
+            0});
+            this.numericUpDown_Angle_Parabola.Name = "numericUpDown_Angle_Parabola";
+            this.numericUpDown_Angle_Parabola.Size = new System.Drawing.Size(120, 22);
+            this.numericUpDown_Angle_Parabola.TabIndex = 21;
+            this.numericUpDown_Angle_Parabola.ValueChanged += new System.EventHandler(this.numericUpDown_Angle_Parabola_ValueChanged);
+            // 
+            // numericUpDown_Vel_Inicial_Parabola
+            // 
+            this.numericUpDown_Vel_Inicial_Parabola.DecimalPlaces = 1;
+            this.numericUpDown_Vel_Inicial_Parabola.Location = new System.Drawing.Point(885, 226);
+            this.numericUpDown_Vel_Inicial_Parabola.Name = "numericUpDown_Vel_Inicial_Parabola";
+            this.numericUpDown_Vel_Inicial_Parabola.Size = new System.Drawing.Size(120, 22);
+            this.numericUpDown_Vel_Inicial_Parabola.TabIndex = 22;
+            this.numericUpDown_Vel_Inicial_Parabola.ValueChanged += new System.EventHandler(this.numericUpDown_Vel_Inicial_Parabola_ValueChanged);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(761, 181);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(49, 16);
+            this.label7.TabIndex = 23;
+            this.label7.Text = "Ángulo";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(761, 228);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(106, 16);
+            this.label8.TabIndex = 24;
+            this.label8.Text = "Velocidad Inicial";
+            // 
             // FormMenu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1067, 554);
+            this.Controls.Add(this.label8);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.numericUpDown_Vel_Inicial_Parabola);
+            this.Controls.Add(this.numericUpDown_Angle_Parabola);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.ejeZtextbox);
             this.Controls.Add(this.ejeYtextbox);
             this.Controls.Add(this.ejeXtextbox);
@@ -343,7 +415,7 @@
             this.Controls.Add(this.treeView1);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FormMenu";
             this.Text = "FormMenu";
             this.Load += new System.EventHandler(this.FormMenu_Load);
@@ -356,6 +428,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_Scaling_X)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_Scaling_Y)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_Scaling_Z)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_Angle_Parabola)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_Vel_Inicial_Parabola)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -383,5 +457,11 @@
         private System.Windows.Forms.CheckBox ejeXtextbox;
         private System.Windows.Forms.CheckBox ejeYtextbox;
         private System.Windows.Forms.CheckBox ejeZtextbox;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.NumericUpDown numericUpDown_Angle_Parabola;
+        private System.Windows.Forms.NumericUpDown numericUpDown_Vel_Inicial_Parabola;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label8;
     }
 }
