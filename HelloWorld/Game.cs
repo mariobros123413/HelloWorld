@@ -42,7 +42,7 @@ namespace HelloWorld
 
             Objeto objeto2 = new Objeto(0, 0, 0);
             objeto2 = CrearTelevision(new float[] { 0, 0, 0 }, Color.Beige, Color.Aquamarine, Color.Blue);
-            Accion parabola = new AccionMovimientoParabolico(objeto2, 75f, 10f, 9.8f,3, 0.8f);
+            Accion parabola = new AccionMovimientoParabolico(objeto2, 75f, 7f, 9.8f,20, 0.8f);
             //Accion traslacion2 = new AccionTraslacion(objeto2, new Vector3(0, 0, 0), new Vector3(-10, 10, 10), 5);
             //Accion rotacion2 = new AccionRotacion(objeto2, 0, 180, new Vector4(0, 0, 1, 0), 5);
             //Accion escalado2 = new AccionEscalado(objeto2, new Vector3(1, 1, 1), new Vector3(2, 2, 2), 5);
@@ -97,8 +97,8 @@ namespace HelloWorld
             GL.LoadIdentity();
 
             // Configurar la vista de la cámara
-            Vector3 cameraPosition = new Vector3(-2, 2, 8); // Posición de la cámara
-            Vector3 cameraTarget = new Vector3(0, 0, 0);   // Punto hacia el que mira la cámara
+            Vector3 cameraPosition = new Vector3(-4, 2, 8); // Posición de la cámara
+            Vector3 cameraTarget = new Vector3(1, 0, 0);   // Punto hacia el que mira la cámara
             Vector3 cameraUp = new Vector3(0, 1, 0);       // Dirección "arriba" de la cámara
 
             Matrix4 lookAt = Matrix4.LookAt(cameraPosition, cameraTarget, cameraUp);

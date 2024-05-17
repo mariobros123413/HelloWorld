@@ -12,7 +12,6 @@ namespace HelloWorld
         protected Objeto objeto;
         protected float duracion; // Duración en segundos
         protected float tiempoTranscurrido; // Tiempo transcurrido en segundos
-
         public Accion(Objeto objeto, float duracion)
         {
             this.objeto = objeto;
@@ -33,6 +32,7 @@ namespace HelloWorld
             {
                 Ejecutar(deltaTime);
                 tiempoTranscurrido += deltaTime;
+                //Console.WriteLine("tiempoTranscurrido : " + tiempoTranscurrido);
             }
         }
     }
