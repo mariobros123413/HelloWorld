@@ -14,14 +14,16 @@ namespace HelloWorld
     public partial class FormMenu : Form
     {
         public List<Accion> accionesPendientes = new List<Accion>();
+        public bool isPaused = false;
 
         private Game game;
+        private List<Objeto> objetos;
         public FormMenu(Game game)
         {
             InitializeComponent();
             FormClosing += FormMenu_FormClosing;
             this.game = game;
-
+            this.objetos = new List<Objeto>(); // Inicializar la lista de objetos
         }
 
         private void FormMenu_Load(object sender, EventArgs e)
@@ -32,17 +34,17 @@ namespace HelloWorld
                 foreach (var escenario in game.listaEscenarios)
                 {
                     TreeNode escenarioNode = new TreeNode(escenario.Nombre);
-                    escenarioNode.Tag = escenario; // Asignar el escenario como el Tag del nodo
+                    escenarioNode.Tag = escenario;
 
                     foreach (var objeto in escenario.ObtenerObjetos())
                     {
                         TreeNode objetoNode = new TreeNode(objeto.Key);
-                        objetoNode.Tag = objeto.Value; // Asignar el objeto como el Tag del nodo
-
+                        objetoNode.Tag = objeto.Value; 
+                        objetos.Add(objeto.Value);
                         foreach (var parte in objeto.Value.ObtenerPartes())
                         {
                             TreeNode parteNode = new TreeNode(parte.Key);
-                            parteNode.Tag = parte.Value; // Asignar la parte como el Tag del nodo
+                            parteNode.Tag = parte.Value;
                             objetoNode.Nodes.Add(parteNode);
                         }
 
@@ -63,18 +65,16 @@ namespace HelloWorld
         {
             foreach (TreeNode node in nodes)
             {
-                if (node.Checked)
+                if (node.Checked && node.Tag is Objeto objeto)
                 {
-                    if (node.Tag is Objeto objeto)
-                    {
-                        Accion parabola = new AccionMovimientoParabolico(objeto, angle, vel, 9.8f, 10000, 0.8f);
-                        AddAccion(parabola);
-                    }
+                    Accion parabola = new AccionMovimientoParabolico(objeto, objetos, angle, vel, 9.8f, 1000, 0.8f);
+                    AddAccion(parabola);
                 }
-                // Recursivamente aplicar la función a los nodos hijos
                 accionParabolaANodos(node.Nodes, angle, vel);
+
             }
         }
+
         private void FormMenu_FormClosing(object sender, FormClosingEventArgs e)
         {
             e.Cancel = true;
@@ -300,6 +300,28 @@ namespace HelloWorld
         private void numericUpDown_Vel_Inicial_Parabola_ValueChanged(object sender, EventArgs e)
         {
             accionParabola();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            isPaused = false;
+
+        }
+
+        private void button_Pause_Click(object sender, EventArgs e)
+        {
+            isPaused = true;
+
+        }
+
+        private void button_Stop_Click(object sender, EventArgs e)
+        {
+            isPaused = false;
+            accionesPendientes.Clear();
+            foreach (var escenario in game.listaEscenarios)
+            {
+                escenario.ResetearPosicion();
+            }
         }
     }
 }

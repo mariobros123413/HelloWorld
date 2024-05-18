@@ -75,6 +75,8 @@ namespace HelloWorld
             }
         }
         public float UltimoAnguloAplicado { get; set; }
+        public float[] posicionInicial { get; set; } // Cambio de Vector3 a float[]
+
         public Objeto(float posX, float posY, float posZ)
         {
             Posicion = new float[] { posX, posY, posZ };
@@ -84,6 +86,9 @@ namespace HelloWorld
             MatrizRotacionX = Matrix4.Identity;
             MatrizRotacionY = Matrix4.Identity;
             MatrizRotacionZ = Matrix4.Identity;
+            Console.WriteLine("posX : " +posX);
+            posicionInicial = new float[] { posX, posY, posZ };
+
         }
         public void AgregarParte(string nombre, Parte parte)
         {
@@ -98,9 +103,16 @@ namespace HelloWorld
         }
         public void AplicarTraslacion(Vector3 traslacion)
         {
-            MatrizTraslacion = Matrix4.CreateTranslation(traslacion) * Matrix4.Identity;
+            // Calcula la diferencia de traslación respecto a la posición actual
+            Vector3 traslacionRelativa = new Vector3(traslacion.X - Posicion[0], traslacion.Y - Posicion[1], traslacion.Z - Posicion[2]);
+
+            // Aplica la nueva traslación relativa
+            MatrizTraslacion *= Matrix4.CreateTranslation(traslacionRelativa);
+
+            // Actualiza la posición con la nueva traslación
             Posicion = new float[] { traslacion.X, traslacion.Y, traslacion.Z };
         }
+
 
         public void AplicarRotacion(float incrementoAngulo, Vector4 eje)
         {
@@ -122,7 +134,6 @@ namespace HelloWorld
             //Matrix4 transformacionLocal = MatrizTraslacion * MatrizRotacionX * MatrizRotacionY * MatrizRotacionZ * MatrizEscalado;
             Transformacion = MatrizRotacionX * MatrizRotacionY * MatrizRotacionZ * MatrizEscalado * MatrizTraslacion;
             Matrix4 transformacionGlobal = Transformacion * transformacionPadre;
-
             foreach (var parte in partes.Values)
             {
                 parte.Dibujar(transformacionGlobal);
@@ -137,7 +148,17 @@ namespace HelloWorld
                 Math.Pow(Posicion[2] - otroObjeto.Posicion[2], 2)
             );
             // Asumimos un radio de colisión de 1 unidad para ambos objetos
-            return distancia < 1.0f;
+            return distancia < 1.2f;
+        }
+        public void ResetearPosicionConTransformacion(Matrix4 transformacionEscenario)
+        {
+            Posicion = new float[] { posicionInicial[0], posicionInicial[1], posicionInicial[2] };
+            MatrizTraslacion = transformacionEscenario;
+
+            foreach (var parte in partes.Values)
+            {
+                parte.ResetearPosicionConTransformacion(MatrizTraslacion);
+            }
         }
     }
 }

@@ -75,15 +75,19 @@ namespace HelloWorld
                 throw new InvalidOperationException("Invalid matrix data");
             }
         }
+        public float[] posicionInicial { get; set; } // Cambio de Vector3 a float[]
+
         public Parte(float posX, float posY, float posZ)
         {
             caras = new Dictionary<string, Cara>();
-            Posicion = new float[3];
+            Posicion = new float[] { posX, posY, posZ };
             MatrizTraslacion = Matrix4.CreateTranslation(posX, posY, posZ);
             MatrizEscalado = Matrix4.Identity;
             MatrizRotacionX = Matrix4.Identity;
             MatrizRotacionY = Matrix4.Identity;
             MatrizRotacionZ = Matrix4.Identity;
+            posicionInicial = new float[] { posX, posY, posZ };
+
         }
         public void AgregarCara(string nombre, Cara cara)
         {
@@ -99,7 +103,13 @@ namespace HelloWorld
         }
         public void AplicarTraslacion(Vector3 traslacion)
         {
-            MatrizTraslacion = Matrix4.CreateTranslation(traslacion) * Matrix4.Identity;
+            // Calcula la diferencia de traslación respecto a la posición actual
+            Vector3 traslacionRelativa = new Vector3(traslacion.X - Posicion[0], traslacion.Y - Posicion[1], traslacion.Z - Posicion[2]);
+
+            // Aplica la nueva traslación relativa
+            MatrizTraslacion *= Matrix4.CreateTranslation(traslacionRelativa);
+
+            // Actualiza la posición con la nueva traslación
             Posicion = new float[] { traslacion.X, traslacion.Y, traslacion.Z };
         }
 
@@ -129,9 +139,13 @@ namespace HelloWorld
             {
                 cara.Dibujar(transformacionGlobal);
             }
-            Dibujar2(getTransformacion());
+            //Dibujar2(getTransformacion());
         }
-
+        public void ResetearPosicionConTransformacion(Matrix4 transformacionObjeto)
+        {
+            Posicion = new float[] {posicionInicial[0], posicionInicial[1], posicionInicial[2] };
+            MatrizTraslacion = Matrix4.CreateTranslation(Posicion[0], Posicion[1], Posicion[2]) * transformacionObjeto;
+        }
         public void Dibujar2(Matrix4 transf)
         {
             GL.PushMatrix();

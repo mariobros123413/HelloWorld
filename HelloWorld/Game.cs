@@ -19,33 +19,24 @@ namespace HelloWorld
 
         public Game(int width, int height) : base(width, height, GraphicsMode.Default, "Multiple TVs")
         {
-            Escenario escenario1 = new Escenario("Escenario 1", 0, 0, 0);
+            //Escenario escenario1 = new Escenario("Escenario 1", 0, 0, 0);
 
-            Objeto objeto = new Objeto(0, 0, 0);
-            objeto = CrearTelevision(new float[] { 0, 0, 0 }, Color.Beige, Color.Aquamarine, Color.Blue);
-            Accion traslacion = new AccionTraslacion(objeto, new Vector3(0, 0, 0), new Vector3(3, 0, 0), 5);
-            Accion rotacion = new AccionRotacion(objeto, 0, 180, new Vector4(0, 0, 1, 0), 5);
-            Accion escalado = new AccionEscalado(objeto, new Vector3(1, 1, 1), new Vector3(2, 2, 2), 5);
+            //Objeto objeto2 = new Objeto(3, 0, 0);
+            //objeto2 = CrearTelevision(objeto2.Posicion, Color.Beige, Color.Aquamarine, Color.Blue);
+            //Objeto CrearFlorero1 = new Objeto(3, 0, 0);
 
-            Objeto objeto2 = new Objeto(0, 0, 0);
-            objeto2 = CrearTelevision(new float[] { 0, 0, 0 }, Color.Beige, Color.Aquamarine, Color.Blue);
-            Accion parabola = new AccionMovimientoParabolico(objeto2, 75f, 7f, 9.8f, 20, 0.8f);
-            //Accion traslacion2 = new AccionTraslacion(objeto2, new Vector3(0, 0, 0), new Vector3(-10, 10, 10), 5);
-            //Accion rotacion2 = new AccionRotacion(objeto2, 0, 180, new Vector4(0, 0, 1, 0), 5);
-            //Accion escalado2 = new AccionEscalado(objeto2, new Vector3(1, 1, 1), new Vector3(2, 2, 2), 5);
+            //CrearFlorero1 = CrearFlorero(CrearFlorero1.Posicion);
+            //escenario1.AgregarObjeto("CrearFlorero1", CrearFlorero1);
 
-            //escenario1.AgregarObjeto("Objeto accionado", objeto);
-            escenario1.AgregarObjeto("Objeto accionado 2", objeto2);
-            listaEscenarios.Add(escenario1);
+            //Objeto pelota = new Objeto(-2, 0, 0);
+            //pelota = CrearEsfera(pelota.Posicion, 0.2f, 100, 100);
+            //escenario1.AgregarObjeto("pelota", pelota);
 
-            AddAccion(traslacion);
-            AddAccion(rotacion);
-            AddAccion(escalado);
-            //AddAccion(traslacion2);
-            //AddAccion(rotacion2);
-            //AddAccion(escalado2);
-            AddAccion(parabola);
+            ////escenario1.AgregarObjeto("Objeto accionado", objeto);
+            //escenario1.AgregarObjeto("Objeto accionado 2", objeto2);
+            //listaEscenarios.Add(escenario1);
             FormMenu menuForm = new FormMenu(this);
+            menu = menuForm;
             accionesPendientes = menuForm.accionesPendientes;
             Load += Game_Load;
             RenderFrame += Game_RenderFrame;
@@ -98,8 +89,8 @@ namespace HelloWorld
             GL.LoadIdentity();
 
             // Configurar la vista de la cámara
-            Vector3 cameraPosition = new Vector3(-4, 2, 8); // Posición de la cámara
-            Vector3 cameraTarget = new Vector3(1, 0, 0);   // Punto hacia el que mira la cámara
+            Vector3 cameraPosition = new Vector3(0, 0, 8); // Posición de la cámara
+            Vector3 cameraTarget = new Vector3(0, 0, 0);   // Punto hacia el que mira la cámara
             Vector3 cameraUp = new Vector3(0, 1, 0);       // Dirección "arriba" de la cámara
 
             Matrix4 lookAt = Matrix4.LookAt(cameraPosition, cameraTarget, cameraUp);
@@ -126,6 +117,10 @@ namespace HelloWorld
 
         private void Game_UpdateFrame(object sender, FrameEventArgs e)
         {
+            if (menu.isPaused)
+            {
+                return;
+            }
             // Incrementa el ángulo de rotación
             angle += (float)e.Time * 90.0f; // Velocidad
 
@@ -170,55 +165,55 @@ namespace HelloWorld
             Objeto television = new Objeto(posicion[0], posicion[1], posicion[2]);
             television.Posicion = posicion;
             // Creamos las partes de la televisión
-            Parte baseTelevision = new Parte(posicion[0], posicion[1], posicion[2]);
+            Parte baseTelevision = new Parte(television.Posicion[0], television.Posicion[1] - 0.77f, television.Posicion[2]);
             Parte marcoTelevision = new Parte(posicion[0], posicion[1], posicion[2]);
             Parte pantallaTelevision = new Parte(posicion[0], posicion[1], posicion[2]);
 
             // Creamos las caras para la base del televisor
             Cara baseTrasera = new Cara(Base);
             baseTrasera.Posicion = posicion;
-            baseTrasera.AgregarPunto(new Vector3(-0.4f, -0.9f, -1.0f));
-            baseTrasera.AgregarPunto(new Vector3(0.4f, -0.9f, -1.0f));
-            baseTrasera.AgregarPunto(new Vector3(0.4f, -0.6f, -1.0f));
-            baseTrasera.AgregarPunto(new Vector3(-0.4f, -0.6f, -1.0f));
+            baseTrasera.AgregarPunto(new Vector3(-0.4f, -0.15f, -0.1f));
+            baseTrasera.AgregarPunto(new Vector3(0.4f, -0.15f, -0.1f));
+            baseTrasera.AgregarPunto(new Vector3(0.4f, 0.15f, -0.1f));
+            baseTrasera.AgregarPunto(new Vector3(-0.4f, 0.15f, -0.1f));
             Cara baseFrontal = new Cara(Base);
             baseFrontal.Posicion = posicion;
 
-            baseFrontal.AgregarPunto(new Vector3(-0.4f, -0.9f, -0.8f));
-            baseFrontal.AgregarPunto(new Vector3(0.4f, -0.9f, -0.8f));
-            baseFrontal.AgregarPunto(new Vector3(0.4f, -0.6f, -0.8f));
-            baseFrontal.AgregarPunto(new Vector3(-0.4f, -0.6f, -0.8f));
+            baseFrontal.AgregarPunto(new Vector3(-0.4f, -0.15f, 0.1f));
+            baseFrontal.AgregarPunto(new Vector3(0.4f, -0.15f, 0.1f));
+            baseFrontal.AgregarPunto(new Vector3(0.4f, 0.15f, 0.1f));
+            baseFrontal.AgregarPunto(new Vector3(-0.4f, 0.15f, 0.1f));
 
             Cara baseLadoIzquierdo = new Cara(Base);
             baseLadoIzquierdo.Posicion = posicion;
-            baseLadoIzquierdo.AgregarPunto(new Vector3(-0.4f, -0.9f, -1.0f));
-            baseLadoIzquierdo.AgregarPunto(new Vector3(-0.4f, -0.9f, -0.8f));
-            baseLadoIzquierdo.AgregarPunto(new Vector3(-0.4f, -0.6f, -0.8f));
-            baseLadoIzquierdo.AgregarPunto(new Vector3(-0.4f, -0.6f, -1.0f));
+            baseLadoIzquierdo.AgregarPunto(new Vector3(-0.4f, -0.15f, -0.1f));
+            baseLadoIzquierdo.AgregarPunto(new Vector3(-0.4f, -0.15f, 0.1f));
+            baseLadoIzquierdo.AgregarPunto(new Vector3(-0.4f, 0.15f, 0.1f));
+            baseLadoIzquierdo.AgregarPunto(new Vector3(-0.4f, 0.15f, -0.1f));
 
             Cara baseLadoDerecho = new Cara(Base);
             baseLadoDerecho.Posicion = posicion;
 
-            baseLadoDerecho.AgregarPunto(new Vector3(0.4f, -0.9f, -1.0f));
-            baseLadoDerecho.AgregarPunto(new Vector3(0.4f, -0.9f, -0.8f));
-            baseLadoDerecho.AgregarPunto(new Vector3(0.4f, -0.6f, -0.8f));
-            baseLadoDerecho.AgregarPunto(new Vector3(0.4f, -0.6f, -1.0f));
+            baseLadoDerecho.AgregarPunto(new Vector3(0.4f, -0.15f, -0.1f));
+            baseLadoDerecho.AgregarPunto(new Vector3(0.4f, -0.15f, 0.1f));
+            baseLadoDerecho.AgregarPunto(new Vector3(0.4f, 0.15f, 0.1f));
+            baseLadoDerecho.AgregarPunto(new Vector3(0.4f, 0.15f, -0.1f));
 
             Cara baseTapaSuperior = new Cara(Base);
             baseTapaSuperior.Posicion = posicion;
 
-            baseTapaSuperior.AgregarPunto(new Vector3(-0.4f, -0.7f, -1.0f));
-            baseTapaSuperior.AgregarPunto(new Vector3(0.4f, -0.7f, -1.0f));
-            baseTapaSuperior.AgregarPunto(new Vector3(0.4f, -0.7f, -0.8f));
-            baseTapaSuperior.AgregarPunto(new Vector3(-0.4f, -0.7f, -0.8f));
+            baseTapaSuperior.AgregarPunto(new Vector3(-0.4f, 0.0f, -0.1f));
+            baseTapaSuperior.AgregarPunto(new Vector3(0.4f, 0.0f, -0.1f));
+            baseTapaSuperior.AgregarPunto(new Vector3(0.4f, 0.0f, 0.1f));
+            baseTapaSuperior.AgregarPunto(new Vector3(-0.4f, 0.0f, 0.1f));
 
             Cara baseTapaInferior = new Cara(Base);
             baseTapaInferior.Posicion = posicion;
 
-            baseTapaInferior.AgregarPunto(new Vector3(-0.4f, -0.9f, -1.0f));
-            baseTapaInferior.AgregarPunto(new Vector3(0.4f, -0.9f, -1.0f));
-            baseTapaInferior.AgregarPunto(new Vector3(0.4f, -0.9f, -0.8f));
-            baseTapaInferior.AgregarPunto(new Vector3(-0.4f, -0.9f, -0.8f));
+            baseTapaInferior.AgregarPunto(new Vector3(-0.4f, -0.15f, -0.1f));
+            baseTapaInferior.AgregarPunto(new Vector3(0.4f, -0.15f, -0.1f));
+            baseTapaInferior.AgregarPunto(new Vector3(0.4f, -0.15f, 0.1f));
+            baseTapaInferior.AgregarPunto(new Vector3(-0.4f, -0.15f, 0.1f));
             // Agregamos las caras a la parte de la base
             baseTelevision.AgregarCara("BaseTrasera", baseTrasera);
             baseTelevision.AgregarCara("BaseFrontal", baseFrontal);
@@ -232,40 +227,40 @@ namespace HelloWorld
             Cara marco = new Cara(marcoc);
             marco.Posicion = posicion;
 
-            marco.AgregarPunto(new Vector3(-1.0f, -0.6f, -1.0f));
-            marco.AgregarPunto(new Vector3(1.0f, -0.6f, -1.0f));
-            marco.AgregarPunto(new Vector3(1.0f, 0.6f, -1.0f));
-            marco.AgregarPunto(new Vector3(-1.0f, 0.6f, -1.0f));
+            marco.AgregarPunto(new Vector3(-1.0f, -0.6f, -0.1f));
+            marco.AgregarPunto(new Vector3(1.0f, -0.6f, -0.1f));
+            marco.AgregarPunto(new Vector3(1.0f, 0.6f, -0.1f));
+            marco.AgregarPunto(new Vector3(-1.0f, 0.6f, -0.1f));
 
             Cara marcoLadoIzquierdo = new Cara(marcoc);
             marcoLadoIzquierdo.Posicion = posicion;
 
-            marcoLadoIzquierdo.AgregarPunto(new Vector3(-1.0f, -0.6f, -1.0f));
-            marcoLadoIzquierdo.AgregarPunto(new Vector3(-1.0f, -0.6f, -0.8f));
-            marcoLadoIzquierdo.AgregarPunto(new Vector3(-1.0f, 0.6f, -0.8f));
-            marcoLadoIzquierdo.AgregarPunto(new Vector3(-1.0f, 0.6f, -1.0f));
+            marcoLadoIzquierdo.AgregarPunto(new Vector3(-1.0f, -0.6f, 0.1f));
+            marcoLadoIzquierdo.AgregarPunto(new Vector3(-1.0f, -0.6f, -0.1f));
+            marcoLadoIzquierdo.AgregarPunto(new Vector3(-1.0f, 0.6f, -0.1f));
+            marcoLadoIzquierdo.AgregarPunto(new Vector3(-1.0f, 0.6f, 0.1f));
 
             Cara marcoLadoDerecho = new Cara(marcoc);
             marcoLadoDerecho.Posicion = posicion;
-            marcoLadoDerecho.AgregarPunto(new Vector3(1.0f, -0.6f, -1.0f));
-            marcoLadoDerecho.AgregarPunto(new Vector3(1.0f, -0.6f, -0.8f));
-            marcoLadoDerecho.AgregarPunto(new Vector3(1.0f, 0.6f, -0.8f));
-            marcoLadoDerecho.AgregarPunto(new Vector3(1.0f, 0.6f, -1.0f));
+            marcoLadoDerecho.AgregarPunto(new Vector3(1.0f, -0.6f, 0.1f));
+            marcoLadoDerecho.AgregarPunto(new Vector3(1.0f, -0.6f, -0.1f));
+            marcoLadoDerecho.AgregarPunto(new Vector3(1.0f, 0.6f, -0.1f));
+            marcoLadoDerecho.AgregarPunto(new Vector3(1.0f, 0.6f, 0.1f));
 
             Cara marcoTapaSuperior = new Cara(marcoc);
             marcoTapaSuperior.Posicion = posicion;
 
-            marcoTapaSuperior.AgregarPunto(new Vector3(-1.0f, 0.6f, -1.0f));
-            marcoTapaSuperior.AgregarPunto(new Vector3(-1.0f, 0.6f, -0.8f));
-            marcoTapaSuperior.AgregarPunto(new Vector3(1.0f, 0.6f, -0.8f));
-            marcoTapaSuperior.AgregarPunto(new Vector3(1.0f, 0.6f, -1.0f));
+            marcoTapaSuperior.AgregarPunto(new Vector3(-1.0f, 0.6f, 0.1f));
+            marcoTapaSuperior.AgregarPunto(new Vector3(-1.0f, 0.6f, -0.1f));
+            marcoTapaSuperior.AgregarPunto(new Vector3(1.0f, 0.6f, -0.1f));
+            marcoTapaSuperior.AgregarPunto(new Vector3(1.0f, 0.6f, 0.1f));
 
             Cara marcoTapaInferior = new Cara(marcoc);
             marcoTapaInferior.Posicion = posicion;
-            marcoTapaInferior.AgregarPunto(new Vector3(-1.0f, -0.6f, -1.0f));
-            marcoTapaInferior.AgregarPunto(new Vector3(-1.0f, -0.6f, -0.8f));
-            marcoTapaInferior.AgregarPunto(new Vector3(1.0f, -0.6f, -0.8f));
-            marcoTapaInferior.AgregarPunto(new Vector3(1.0f, -0.6f, -1.0f));
+            marcoTapaInferior.AgregarPunto(new Vector3(-1.0f, -0.6f, 0.1f));
+            marcoTapaInferior.AgregarPunto(new Vector3(-1.0f, -0.6f, -0.1f));
+            marcoTapaInferior.AgregarPunto(new Vector3(1.0f, -0.6f, -0.1f));
+            marcoTapaInferior.AgregarPunto(new Vector3(1.0f, -0.6f, 0.1f));
 
             marcoTelevision.AgregarCara("Marco", marco);
             marcoTelevision.AgregarCara("MarcoLadoIzquierdo", marcoLadoIzquierdo);
@@ -275,10 +270,10 @@ namespace HelloWorld
 
             Cara pantalla = new Cara(pantallac);
             pantalla.Posicion = posicion;
-            pantalla.AgregarPunto(new Vector3(-0.8f, -0.4f, -0.81f));
-            pantalla.AgregarPunto(new Vector3(0.8f, -0.4f, -0.81f));
-            pantalla.AgregarPunto(new Vector3(0.8f, 0.4f, -0.81f));
-            pantalla.AgregarPunto(new Vector3(-0.8f, 0.4f, -0.81f));
+            pantalla.AgregarPunto(new Vector3(-0.8f, -0.4f, 0.1f));
+            pantalla.AgregarPunto(new Vector3(0.8f, -0.4f, 0.1f));
+            pantalla.AgregarPunto(new Vector3(0.8f, 0.4f, 0.1f));
+            pantalla.AgregarPunto(new Vector3(-0.8f, 0.4f, 0.1f));
             // Agregamos la cara a la parte de la pantalla
             pantallaTelevision.AgregarCara("Pantalla", pantalla);
 
@@ -519,6 +514,58 @@ namespace HelloWorld
             }
 
             return cubo;
+        }
+        private Objeto CrearEsfera(float[] posicion, float radio, int segmentos, int anillos)
+        {
+            Objeto esfera = new Objeto(posicion[0], posicion[1], posicion[2]); // Centrado en el origen
+
+            // Crear los vértices de la esfera
+            List<Vector3> vertices = new List<Vector3>();
+
+            for (int i = 0; i <= anillos; i++)
+            {
+                float phi = MathHelper.Pi * i / anillos;
+                float y = radio * (float)Math.Cos(phi);
+                float r = radio * (float)Math.Sin(phi);
+
+                for (int j = 0; j <= segmentos; j++)
+                {
+                    float theta = 2 * MathHelper.Pi * j / segmentos;
+                    float x = r * (float)Math.Cos(theta);
+                    float z = r * (float)Math.Sin(theta);
+
+                    vertices.Add(new Vector3(x, y, z));
+                }
+            }
+
+            // Crear las caras de la esfera
+            Parte parteEsfera = new Parte(posicion[0], posicion[1], posicion[2]);
+            Color colorEsfera = Color.Red; // Color de la esfera
+            Cara caraEsfera = new Cara(colorEsfera);
+
+            for (int i = 0; i < anillos; i++)
+            {
+                for (int j = 0; j < segmentos; j++)
+                {
+                    int first = (i * (segmentos + 1)) + j;
+                    int second = first + segmentos + 1;
+
+                    // Triángulo 1
+                    caraEsfera.AgregarPunto(vertices[first]);
+                    caraEsfera.AgregarPunto(vertices[second]);
+                    caraEsfera.AgregarPunto(vertices[first + 1]);
+
+                    // Triángulo 2
+                    caraEsfera.AgregarPunto(vertices[second]);
+                    caraEsfera.AgregarPunto(vertices[second + 1]);
+                    caraEsfera.AgregarPunto(vertices[first + 1]);
+                }
+            }
+
+            parteEsfera.AgregarCara("Esfera", caraEsfera);
+            esfera.AgregarParte("Esfera", parteEsfera);
+
+            return esfera;
         }
 
     }

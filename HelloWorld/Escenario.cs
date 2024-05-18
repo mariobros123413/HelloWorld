@@ -11,6 +11,7 @@ namespace HelloWorld
     public class Escenario
     {
         public String Nombre;
+        public float[] posicionInicial { get; set; } // Cambio de Vector3 a float[]
         public Dictionary<String, Objeto> Objetos;
         public float[] Posicion { get; set; }
         private Matrix4 MatrizTraslacion { get; set; }
@@ -87,10 +88,22 @@ namespace HelloWorld
             MatrizRotacionX = Matrix4.Identity;
             MatrizRotacionY = Matrix4.Identity;
             MatrizRotacionZ = Matrix4.Identity;
+            posicionInicial = new float[] { posX, posY, posZ };
+
         }
         public Matrix4 getTransformacion()
         {
             return MatrizTraslacion * MatrizRotacionX * MatrizRotacionY * MatrizRotacionZ * MatrizEscalado;
+        }
+        public void ResetearPosicion()
+        {
+            Posicion = new float[] { posicionInicial[0], posicionInicial[1], posicionInicial[2] };
+            MatrizTraslacion = Matrix4.CreateTranslation(new Vector3(Posicion[0], Posicion[1], Posicion[2]));
+
+            foreach (var objeto in Objetos.Values)
+            {
+                objeto.ResetearPosicionConTransformacion(getTransformacion());
+            }
         }
         public void AgregarObjeto(String nombre, Objeto objeto)
         {
@@ -108,7 +121,12 @@ namespace HelloWorld
         }
         public void AplicarTraslacion(Vector3 traslacion)
         {
-            MatrizTraslacion = Matrix4.CreateTranslation(traslacion) * Matrix4.Identity;
+            Vector3 traslacionRelativa = new Vector3(traslacion.X - Posicion[0], traslacion.Y - Posicion[1], traslacion.Z - Posicion[2]);
+
+            // Aplica la nueva traslación relativa
+            MatrizTraslacion *= Matrix4.CreateTranslation(traslacionRelativa);
+
+            // Actualiza la posición con la nueva traslación
             Posicion = new float[] { traslacion.X, traslacion.Y, traslacion.Z };
         }
 
